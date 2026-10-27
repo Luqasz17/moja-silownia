@@ -116,20 +116,6 @@
           }
         ],
         "isHidden": false
-      },
-      {
-        "id": "1793133119297",
-        "name": "Test",
-        "exercises": [
-          {
-            "id": "1793133126136",
-            "name": "Test",
-            "targetWeight": "10",
-            "sets": 2,
-            "reps": 3
-          }
-        ],
-        "isHidden": false
       }
     ],
     "workoutHistory": [
