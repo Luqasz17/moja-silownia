@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "exportedAt": "2026-10-27T20:32:47.692Z",
+  "exportedAt": "2026-10-27T21:01:34.639Z",
   "owner": "Luqasz17",
   "repo": "moja-silownia",
   "data": {
@@ -11,7 +11,7 @@
         "exercises": [
           {
             "id": "1792425213375",
-            "name": "Przysiady bułgarskie z hantlami",
+            "name": "Przysiady buÅgarskie z hantlami",
             "targetWeight": "20",
             "sets": 3,
             "reps": 10
@@ -25,21 +25,21 @@
           },
           {
             "id": "1792425254077",
-            "name": "Przenoszenie hantla za głowę",
+            "name": "Przenoszenie hantla za gÅowÄ",
             "targetWeight": "28",
             "sets": 3,
             "reps": 8
           },
           {
             "id": "1792425279268",
-            "name": "Odwrotne rozpiętki hantlami",
+            "name": "Odwrotne rozpiÄtki hantlami",
             "targetWeight": "7",
             "sets": 3,
             "reps": 15
           },
           {
             "id": "1792425297398",
-            "name": "Wznosy hantli bokiem stojąc",
+            "name": "Wznosy hantli bokiem stojÄc",
             "targetWeight": "7",
             "sets": 3,
             "reps": 15
@@ -53,7 +53,7 @@
           },
           {
             "id": "1792425340419",
-            "name": "Spięcia brzucha z hantlem leżąc",
+            "name": "SpiÄcia brzucha z hantlem leÅ¼Äc",
             "targetWeight": "20",
             "sets": 3,
             "reps": 20
@@ -67,28 +67,28 @@
         "exercises": [
           {
             "id": "1792424999858",
-            "name": "Rumuński martwy ciąg",
+            "name": "RumuÅski martwy ciÄg",
             "targetWeight": "55",
             "sets": 3,
             "reps": 8
           },
           {
             "id": "1792425026459",
-            "name": "Wiosłowanie hantlem jednorącz",
+            "name": "WiosÅowanie hantlem jednorÄcz",
             "targetWeight": "24",
             "sets": 3,
             "reps": 12
           },
           {
             "id": "1792425054397",
-            "name": "Wyciskanie sztangi ławka płaska",
+            "name": "Wyciskanie sztangi Åawka pÅaska",
             "targetWeight": "52",
             "sets": 3,
             "reps": 8
           },
           {
             "id": "1792425080359",
-            "name": "Rozpiętki hantlami na płaskiej",
+            "name": "RozpiÄtki hantlami na pÅaskiej",
             "targetWeight": "12",
             "sets": 3,
             "reps": 10
@@ -102,14 +102,14 @@
           },
           {
             "id": "1792425139621",
-            "name": "Uginanie młotkowe",
+            "name": "Uginanie mÅotkowe",
             "targetWeight": "12",
             "sets": 3,
             "reps": 10
           },
           {
             "id": "1792425162552",
-            "name": "Spięcia brzucha z hantlem leżąc",
+            "name": "SpiÄcia brzucha z hantlem leÅ¼Äc",
             "targetWeight": "20",
             "sets": 3,
             "reps": 20
@@ -126,7 +126,7 @@
         "planName": "Trening A",
         "exercises": [
           {
-            "name": "Przysiady bułgarskie z hantlami",
+            "name": "Przysiady buÅgarskie z hantlami",
             "notes": "Zostawiamy na razie",
             "targetSets": 3,
             "targetReps": 10,
@@ -151,7 +151,7 @@
           },
           {
             "name": "Wyciskanie hantli na skosie dodatnim",
-            "notes": "Brak sily na koniec ostatniej serii i przez to kilka nie pełnych powtórzen",
+            "notes": "Brak sily na koniec ostatniej serii i przez to kilka nie peÅnych powtÃ³rzen",
             "targetSets": 3,
             "targetReps": 10,
             "targetWeight": "20",
@@ -174,7 +174,7 @@
             ]
           },
           {
-            "name": "Przenoszenie hantla za głowę",
+            "name": "Przenoszenie hantla za gÅowÄ",
             "notes": "Na razie jest w sam raz",
             "targetSets": 3,
             "targetReps": 8,
@@ -198,7 +198,7 @@
             ]
           },
           {
-            "name": "Odwrotne rozpiętki hantlami",
+            "name": "Odwrotne rozpiÄtki hantlami",
             "notes": "Wiecej na razie nie ma co",
             "targetSets": 3,
             "targetReps": 15,
@@ -222,7 +222,7 @@
             ]
           },
           {
-            "name": "Wznosy hantli bokiem stojąc",
+            "name": "Wznosy hantli bokiem stojÄc",
             "notes": "Tu by mozna bylo dolozyc kapke",
             "targetSets": 3,
             "targetReps": 15,
@@ -247,7 +247,7 @@
           },
           {
             "name": "Francuz hantlami",
-            "notes": "Ostatnie powtórzenie w ostatniej serii oszukane",
+            "notes": "Ostatnie powtÃ³rzenie w ostatniej serii oszukane",
             "targetSets": 3,
             "targetReps": 10,
             "targetWeight": "12",
@@ -270,7 +270,7 @@
             ]
           },
           {
-            "name": "Spięcia brzucha z hantlem leżąc",
+            "name": "SpiÄcia brzucha z hantlem leÅ¼Äc",
             "notes": "",
             "targetSets": 3,
             "targetReps": 20,
@@ -302,8 +302,8 @@
         "planName": "Trening B",
         "exercises": [
           {
-            "name": "Rumuński martwy ciąg",
-            "notes": "Muszę jeszcze przywyknąć do ciezaru",
+            "name": "RumuÅski martwy ciÄg",
+            "notes": "MuszÄ jeszcze przywyknÄÄ do ciezaru",
             "targetSets": 3,
             "targetReps": 8,
             "targetWeight": "55",
@@ -326,7 +326,7 @@
             ]
           },
           {
-            "name": "Wiosłowanie hantlem jednorącz",
+            "name": "WiosÅowanie hantlem jednorÄcz",
             "notes": "Lewa nie domaga",
             "targetSets": 3,
             "targetReps": 12,
@@ -350,8 +350,8 @@
             ]
           },
           {
-            "name": "Wyciskanie sztangi ławka płaska",
-            "notes": "Udalo sie bez oszukiwania i chyba bym jedno powtórzenie wiecej mógł zrobić",
+            "name": "Wyciskanie sztangi Åawka pÅaska",
+            "notes": "Udalo sie bez oszukiwania i chyba bym jedno powtÃ³rzenie wiecej mÃ³gÅ zrobiÄ",
             "targetSets": 3,
             "targetReps": 8,
             "targetWeight": "52",
@@ -374,7 +374,7 @@
             ]
           },
           {
-            "name": "Rozpiętki hantlami na płaskiej",
+            "name": "RozpiÄtki hantlami na pÅaskiej",
             "notes": "12 powtorzen to chyba troszke za duzo",
             "targetSets": 3,
             "targetReps": 12,
@@ -422,8 +422,8 @@
             ]
           },
           {
-            "name": "Uginanie młotkowe",
-            "notes": "Tak samo jak wyżej",
+            "name": "Uginanie mÅotkowe",
+            "notes": "Tak samo jak wyÅ¼ej",
             "targetSets": 3,
             "targetReps": 10,
             "targetWeight": "12",
@@ -446,7 +446,7 @@
             ]
           },
           {
-            "name": "Spięcia brzucha z hantlem leżąc",
+            "name": "SpiÄcia brzucha z hantlem leÅ¼Äc",
             "notes": "",
             "targetSets": 3,
             "targetReps": 20,
@@ -478,7 +478,7 @@
         "planName": "Trening A",
         "exercises": [
           {
-            "name": "Przysiady bułgarskie z hantlami",
+            "name": "Przysiady buÅgarskie z hantlami",
             "notes": "Z lekkim zapasem",
             "targetSets": 3,
             "targetReps": 10,
@@ -503,7 +503,7 @@
           },
           {
             "name": "Wyciskanie hantli na skosie dodatnim",
-            "notes": "Nie mialem jak zalozyc 18. Z zapasem co widać po ostatniej serii.",
+            "notes": "Nie mialem jak zalozyc 18. Z zapasem co widaÄ po ostatniej serii.",
             "targetSets": 3,
             "targetReps": 10,
             "targetWeight": "18",
@@ -526,7 +526,7 @@
             ]
           },
           {
-            "name": "Przenoszenie hantla za głowę",
+            "name": "Przenoszenie hantla za gÅowÄ",
             "notes": "Z lekkim zapasem",
             "targetSets": 3,
             "targetReps": 10,
@@ -550,8 +550,8 @@
             ]
           },
           {
-            "name": "Odwrotne rozpiętki hantlami",
-            "notes": "Dalej mam wrażenie że jest ciezko i nie ma zapasu bo im dalej w las tym niżej podnosze ręce",
+            "name": "Odwrotne rozpiÄtki hantlami",
+            "notes": "Dalej mam wraÅ¼enie Å¼e jest ciezko i nie ma zapasu bo im dalej w las tym niÅ¼ej podnosze rÄce",
             "targetSets": 3,
             "targetReps": 15,
             "targetWeight": "7",
@@ -574,8 +574,8 @@
             ]
           },
           {
-            "name": "Wznosy hantli bokiem stojąc",
-            "notes": "Nie mam jak zalozyc 8 a jak zalozylem 9 to nie do konca podnosilem ręce. Wracam do 7",
+            "name": "Wznosy hantli bokiem stojÄc",
+            "notes": "Nie mam jak zalozyc 8 a jak zalozylem 9 to nie do konca podnosilem rÄce. Wracam do 7",
             "targetSets": 3,
             "targetReps": 15,
             "targetWeight": "8",
@@ -599,7 +599,7 @@
           },
           {
             "name": "Francuz hantlami",
-            "notes": "Nie dalem rady dziesiątego powtórzenia w ostatniej serii.",
+            "notes": "Nie dalem rady dziesiÄtego powtÃ³rzenia w ostatniej serii.",
             "targetSets": 3,
             "targetReps": 10,
             "targetWeight": "12",
@@ -622,7 +622,7 @@
             ]
           },
           {
-            "name": "Spięcia brzucha z hantlem leżąc",
+            "name": "SpiÄcia brzucha z hantlem leÅ¼Äc",
             "notes": "",
             "targetSets": 3,
             "targetReps": 20,
@@ -651,7 +651,7 @@
     "barbells": [
       {
         "id": "1792496681666",
-        "name": "Długa",
+        "name": "DÅuga",
         "weight": "7"
       },
       {
