@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "exportedAt": "2026-10-27T20:31:01.848Z",
+  "exportedAt": "2026-10-27T20:32:03.358Z",
   "owner": "Luqasz17",
   "repo": "moja-silownia",
   "data": {
@@ -115,6 +115,12 @@
             "reps": 20
           }
         ],
+        "isHidden": false
+      },
+      {
+        "id": "1793133119297",
+        "name": "Test",
+        "exercises": [],
         "isHidden": false
       }
     ],
