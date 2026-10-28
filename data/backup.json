@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "exportedAt": "2026-10-28T12:51:04.954Z",
+  "exportedAt": "2026-10-28T12:51:21.254Z",
   "owner": "Luqasz17",
   "repo": "moja-silownia",
   "data": {
@@ -25,7 +25,7 @@
           },
           {
             "id": "1792425254077",
-            "name": "Przenoszenie hantla za gÅowÄ",
+            "name": "Przenoszenie hantla za głowę",
             "targetWeight": "28",
             "sets": 3,
             "reps": 8
