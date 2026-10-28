@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "exportedAt": "2026-10-28T12:52:47.317Z",
+  "exportedAt": "2026-10-28T12:53:30.329Z",
   "owner": "Luqasz17",
   "repo": "moja-silownia",
   "data": {
@@ -67,7 +67,7 @@
         "exercises": [
           {
             "id": "1792424999858",
-            "name": "RumuÅski martwy ciÄg",
+            "name": "Rumuński martwy ciąg",
             "targetWeight": "55",
             "sets": 3,
             "reps": 8
