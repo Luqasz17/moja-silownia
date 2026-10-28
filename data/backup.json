@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "exportedAt": "2026-10-28T12:51:21.254Z",
+  "exportedAt": "2026-10-28T12:51:31.578Z",
   "owner": "Luqasz17",
   "repo": "moja-silownia",
   "data": {
@@ -32,7 +32,7 @@
           },
           {
             "id": "1792425279268",
-            "name": "Odwrotne rozpiÄtki hantlami",
+            "name": "Odwrotne rozpiętki hantlami",
             "targetWeight": "7",
             "sets": 3,
             "reps": 15
