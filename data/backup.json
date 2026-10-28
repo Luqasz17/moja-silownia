@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "exportedAt": "2026-10-28T12:53:56.356Z",
+  "exportedAt": "2026-10-28T12:54:10.561Z",
   "owner": "Luqasz17",
   "repo": "moja-silownia",
   "data": {
@@ -88,7 +88,7 @@
           },
           {
             "id": "1792425080359",
-            "name": "RozpiÄtki hantlami na pÅaskiej",
+            "name": "Rozpiętki hantlami na płaskiej",
             "targetWeight": "12",
             "sets": 3,
             "reps": 10
