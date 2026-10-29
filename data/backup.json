@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "exportedAt": "2026-10-29T14:52:34.412Z",
+  "exportedAt": "2026-10-29T14:52:50.281Z",
   "owner": "Luqasz17",
   "repo": "moja-silownia",
   "data": {
@@ -68,7 +68,7 @@
           {
             "id": "1792424999858",
             "name": "Rumuński martwy ciąg",
-            "targetWeight": "55",
+            "targetWeight": "58",
             "sets": 3,
             "reps": 8
           },
