@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "exportedAt": "2026-10-29T14:53:05.388Z",
+  "exportedAt": "2026-10-29T14:53:28.271Z",
   "owner": "Luqasz17",
   "repo": "moja-silownia",
   "data": {
@@ -82,7 +82,7 @@
           {
             "id": "1792425054397",
             "name": "Wyciskanie sztangi ławka płaska",
-            "targetWeight": "52",
+            "targetWeight": "50",
             "sets": 3,
             "reps": 8
           },
