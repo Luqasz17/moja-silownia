@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "exportedAt": "2026-10-29T14:30:53.653Z",
+  "exportedAt": "2026-10-29T14:50:32.185Z",
   "owner": "Luqasz17",
   "repo": "moja-silownia",
   "data": {
@@ -600,6 +600,182 @@
           {
             "name": "Francuz hantlami",
             "notes": "Nie dalem rady dziesiątego powtórzenia w ostatniej serii.",
+            "targetSets": 3,
+            "targetReps": 10,
+            "targetWeight": "12",
+            "sets": [
+              {
+                "reps": "10",
+                "weight": "12",
+                "isCompleted": true
+              },
+              {
+                "reps": "10",
+                "weight": "12",
+                "isCompleted": true
+              },
+              {
+                "reps": "10",
+                "weight": "12",
+                "isCompleted": true
+              }
+            ]
+          },
+          {
+            "name": "Spięcia brzucha z hantlem leżąc",
+            "notes": "",
+            "targetSets": 3,
+            "targetReps": 20,
+            "targetWeight": "20",
+            "sets": [
+              {
+                "reps": "20",
+                "weight": "20",
+                "isCompleted": true
+              },
+              {
+                "reps": "20",
+                "weight": "20",
+                "isCompleted": true
+              },
+              {
+                "reps": "20",
+                "weight": "20",
+                "isCompleted": true
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "1793285428118",
+        "timestamp": 1793285428118,
+        "date": "29.10.2026",
+        "planName": "Trening B",
+        "exercises": [
+          {
+            "name": "Rumuński martwy ciąg",
+            "notes": "Z zapasem",
+            "targetSets": 3,
+            "targetReps": 8,
+            "targetWeight": "55",
+            "sets": [
+              {
+                "reps": "8",
+                "weight": "55",
+                "isCompleted": true
+              },
+              {
+                "reps": "8",
+                "weight": "55",
+                "isCompleted": true
+              },
+              {
+                "reps": "10",
+                "weight": "55",
+                "isCompleted": true
+              }
+            ]
+          },
+          {
+            "name": "Wiosłowanie hantlem jednorącz",
+            "notes": "Wydaje mi się ze przy tym ciężarze gubię technike",
+            "targetSets": 3,
+            "targetReps": 12,
+            "targetWeight": "24",
+            "sets": [
+              {
+                "reps": "12",
+                "weight": "24",
+                "isCompleted": true
+              },
+              {
+                "reps": "12",
+                "weight": "24",
+                "isCompleted": true
+              },
+              {
+                "reps": "12",
+                "weight": "24",
+                "isCompleted": true
+              }
+            ]
+          },
+          {
+            "name": "Wyciskanie sztangi ławka płaska",
+            "notes": "Ledwo co mi sie udało niestety cos nie rosnie tu sila",
+            "targetSets": 3,
+            "targetReps": 8,
+            "targetWeight": "52",
+            "sets": [
+              {
+                "reps": "8",
+                "weight": "52",
+                "isCompleted": true
+              },
+              {
+                "reps": "8",
+                "weight": "52",
+                "isCompleted": true
+              },
+              {
+                "reps": "8",
+                "weight": "52",
+                "isCompleted": true
+              }
+            ]
+          },
+          {
+            "name": "Rozpiętki hantlami na płaskiej",
+            "notes": "Z zapasem",
+            "targetSets": 3,
+            "targetReps": 10,
+            "targetWeight": "12",
+            "sets": [
+              {
+                "reps": "10",
+                "weight": "12",
+                "isCompleted": true
+              },
+              {
+                "reps": "10",
+                "weight": "12",
+                "isCompleted": true
+              },
+              {
+                "reps": "10",
+                "weight": "12",
+                "isCompleted": true
+              }
+            ]
+          },
+          {
+            "name": "Biceps hantlem na modlitewniku",
+            "notes": "Zmienilem na nie modlitewniku i ogolnie mialem lekki zapas ale chyba na razie nie ma co bardziej po ostatnich przebojach",
+            "targetSets": 3,
+            "targetReps": 10,
+            "targetWeight": "12",
+            "sets": [
+              {
+                "reps": "10",
+                "weight": "12",
+                "isCompleted": true
+              },
+              {
+                "reps": "10",
+                "weight": "12",
+                "isCompleted": true
+              },
+              {
+                "reps": "10",
+                "weight": "12",
+                "isCompleted": true
+              }
+            ]
+          },
+          {
+            "name": "Uginanie młotkowe",
+            "notes": "Tak samo jak wyzej",
             "targetSets": 3,
             "targetReps": 10,
             "targetWeight": "12",
