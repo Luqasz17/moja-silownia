@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "exportedAt": "2026-11-02T17:17:13.188Z",
+  "exportedAt": "2026-11-02T17:17:43.234Z",
   "owner": "Luqasz17",
   "repo": "moja-silownia",
   "data": {
@@ -21,7 +21,7 @@
             "name": "Wyciskanie hantli na skosie dodatnim",
             "targetWeight": "20",
             "sets": 3,
-            "reps": 8
+            "reps": 10
           },
           {
             "id": "1792425254077",
