@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "exportedAt": "2026-11-02T17:18:36.993Z",
+  "exportedAt": "2026-11-02T17:18:50.132Z",
   "owner": "Luqasz17",
   "repo": "moja-silownia",
   "data": {
@@ -49,7 +49,7 @@
             "name": "Francuz hantlami",
             "targetWeight": "12",
             "sets": 3,
-            "reps": 10
+            "reps": 12
           },
           {
             "id": "1792425340419",
