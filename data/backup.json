@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "exportedAt": "2026-11-02T17:07:32.740Z",
+  "exportedAt": "2026-11-02T17:08:16.197Z",
   "owner": "Luqasz17",
   "repo": "moja-silownia",
   "data": {
@@ -792,6 +792,182 @@
               },
               {
                 "reps": "10",
+                "weight": "12",
+                "isCompleted": true
+              }
+            ]
+          },
+          {
+            "name": "Spięcia brzucha z hantlem leżąc",
+            "notes": "",
+            "targetSets": 3,
+            "targetReps": 20,
+            "targetWeight": "20",
+            "sets": [
+              {
+                "reps": "20",
+                "weight": "20",
+                "isCompleted": true
+              },
+              {
+                "reps": "20",
+                "weight": "20",
+                "isCompleted": true
+              },
+              {
+                "reps": "20",
+                "weight": "20",
+                "isCompleted": true
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "1793639292109",
+        "timestamp": 1793639292109,
+        "date": "02.11.2026",
+        "planName": "Trening A",
+        "exercises": [
+          {
+            "name": "Przysiady bułgarskie z hantlami",
+            "notes": "ciezko zostaje na razie",
+            "targetSets": 3,
+            "targetReps": 10,
+            "targetWeight": "20",
+            "sets": [
+              {
+                "reps": "10",
+                "weight": "20",
+                "isCompleted": true
+              },
+              {
+                "reps": "10",
+                "weight": "20",
+                "isCompleted": true
+              },
+              {
+                "reps": "10",
+                "weight": "20",
+                "isCompleted": true
+              }
+            ]
+          },
+          {
+            "name": "Wyciskanie hantli na skosie dodatnim",
+            "notes": "z lekkim zapasem",
+            "targetSets": 3,
+            "targetReps": 8,
+            "targetWeight": "20",
+            "sets": [
+              {
+                "reps": "8",
+                "weight": "20",
+                "isCompleted": true
+              },
+              {
+                "reps": "8",
+                "weight": "20",
+                "isCompleted": true
+              },
+              {
+                "reps": "10",
+                "weight": "20",
+                "isCompleted": true
+              }
+            ]
+          },
+          {
+            "name": "Przenoszenie hantla za głowę",
+            "notes": "czuje ze dalbym rade wiecej ale mam taka pozycje nie wygodna na swojej lawce ze az bym sie bal wiecej",
+            "targetSets": 3,
+            "targetReps": 8,
+            "targetWeight": "28",
+            "sets": [
+              {
+                "reps": "8",
+                "weight": "28",
+                "isCompleted": true
+              },
+              {
+                "reps": "8",
+                "weight": "28",
+                "isCompleted": true
+              },
+              {
+                "reps": "10",
+                "weight": "28",
+                "isCompleted": true
+              }
+            ]
+          },
+          {
+            "name": "Odwrotne rozpiętki hantlami",
+            "notes": "caly czas tak samo zostaje to na razie",
+            "targetSets": 3,
+            "targetReps": 15,
+            "targetWeight": "7",
+            "sets": [
+              {
+                "reps": "15",
+                "weight": "7",
+                "isCompleted": true
+              },
+              {
+                "reps": "15",
+                "weight": "7",
+                "isCompleted": true
+              },
+              {
+                "reps": "15",
+                "weight": "7",
+                "isCompleted": true
+              }
+            ]
+          },
+          {
+            "name": "Wznosy hantli bokiem stojąc",
+            "notes": "chyba bym sie pokusil o zmniejszenie powtorzen zeby bardziej technikę poczuć",
+            "targetSets": 3,
+            "targetReps": 15,
+            "targetWeight": "7",
+            "sets": [
+              {
+                "reps": "15",
+                "weight": "7",
+                "isCompleted": true
+              },
+              {
+                "reps": "15",
+                "weight": "7",
+                "isCompleted": true
+              },
+              {
+                "reps": "15",
+                "weight": "7",
+                "isCompleted": true
+              }
+            ]
+          },
+          {
+            "name": "Francuz hantlami",
+            "notes": "w koncu z lekkim zapasem",
+            "targetSets": 3,
+            "targetReps": 10,
+            "targetWeight": "12",
+            "sets": [
+              {
+                "reps": "10",
+                "weight": "12",
+                "isCompleted": true
+              },
+              {
+                "reps": "10",
+                "weight": "12",
+                "isCompleted": true
+              },
+              {
+                "reps": "12",
                 "weight": "12",
                 "isCompleted": true
               }
