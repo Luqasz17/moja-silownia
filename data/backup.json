@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "exportedAt": "2026-11-02T17:18:50.132Z",
+  "exportedAt": "2026-11-04T16:18:03.057Z",
   "owner": "Luqasz17",
   "repo": "moja-silownia",
   "data": {
@@ -968,6 +968,182 @@
               },
               {
                 "reps": "12",
+                "weight": "12",
+                "isCompleted": true
+              }
+            ]
+          },
+          {
+            "name": "Spięcia brzucha z hantlem leżąc",
+            "notes": "",
+            "targetSets": 3,
+            "targetReps": 20,
+            "targetWeight": "20",
+            "sets": [
+              {
+                "reps": "20",
+                "weight": "20",
+                "isCompleted": true
+              },
+              {
+                "reps": "20",
+                "weight": "20",
+                "isCompleted": true
+              },
+              {
+                "reps": "20",
+                "weight": "20",
+                "isCompleted": true
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "1793808967534",
+        "timestamp": 1793808967534,
+        "date": "04.11.2026",
+        "planName": "Trening B",
+        "exercises": [
+          {
+            "name": "Rumuński martwy ciąg",
+            "notes": "nie mialem jak zalozyc 58, musze przywyknąć na razie do 57 i potem sie przeskoczy dalej",
+            "targetSets": 3,
+            "targetReps": 8,
+            "targetWeight": "58",
+            "sets": [
+              {
+                "reps": "8",
+                "weight": "57",
+                "isCompleted": true
+              },
+              {
+                "reps": "8",
+                "weight": "57",
+                "isCompleted": true
+              },
+              {
+                "reps": "8",
+                "weight": "57",
+                "isCompleted": true
+              }
+            ]
+          },
+          {
+            "name": "Wiosłowanie hantlem jednorącz",
+            "notes": "z tym ciezarem lepiej ale dalej nie lubie tego ćwiczenia",
+            "targetSets": 3,
+            "targetReps": 12,
+            "targetWeight": "22",
+            "sets": [
+              {
+                "reps": "12",
+                "weight": "22",
+                "isCompleted": true
+              },
+              {
+                "reps": "12",
+                "weight": "22",
+                "isCompleted": true
+              },
+              {
+                "reps": "12",
+                "weight": "22",
+                "isCompleted": true
+              }
+            ]
+          },
+          {
+            "name": "Wyciskanie sztangi ławka płaska",
+            "notes": "dodalem sekundową pauze na samym dole zamiast wybic sztange z klatki i te 50 starczylo zeby mnie zpompowac",
+            "targetSets": 3,
+            "targetReps": 8,
+            "targetWeight": "50",
+            "sets": [
+              {
+                "reps": "8",
+                "weight": "50",
+                "isCompleted": true
+              },
+              {
+                "reps": "8",
+                "weight": "50",
+                "isCompleted": true
+              },
+              {
+                "reps": "8",
+                "weight": "50",
+                "isCompleted": true
+              }
+            ]
+          },
+          {
+            "name": "Rozpiętki hantlami na płaskiej",
+            "notes": "ciezko",
+            "targetSets": 3,
+            "targetReps": 12,
+            "targetWeight": "12",
+            "sets": [
+              {
+                "reps": "12",
+                "weight": "12",
+                "isCompleted": true
+              },
+              {
+                "reps": "12",
+                "weight": "12",
+                "isCompleted": true
+              },
+              {
+                "reps": "12",
+                "weight": "12",
+                "isCompleted": true
+              }
+            ]
+          },
+          {
+            "name": "Biceps hantlem na modlitewniku",
+            "notes": "bez modlitewnika ale i tak ciezko",
+            "targetSets": 3,
+            "targetReps": 10,
+            "targetWeight": "12",
+            "sets": [
+              {
+                "reps": "10",
+                "weight": "12",
+                "isCompleted": true
+              },
+              {
+                "reps": "10",
+                "weight": "12",
+                "isCompleted": true
+              },
+              {
+                "reps": "10",
+                "weight": "12",
+                "isCompleted": true
+              }
+            ]
+          },
+          {
+            "name": "Uginanie młotkowe",
+            "notes": "piecze",
+            "targetSets": 3,
+            "targetReps": 10,
+            "targetWeight": "12",
+            "sets": [
+              {
+                "reps": "10",
+                "weight": "12",
+                "isCompleted": true
+              },
+              {
+                "reps": "10",
+                "weight": "12",
+                "isCompleted": true
+              },
+              {
+                "reps": "10",
                 "weight": "12",
                 "isCompleted": true
               }
