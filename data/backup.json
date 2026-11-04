@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "exportedAt": "2026-11-04T16:19:27.630Z",
+  "exportedAt": "2026-11-04T16:19:50.611Z",
   "owner": "Luqasz17",
   "repo": "moja-silownia",
   "data": {
@@ -95,7 +95,7 @@
           },
           {
             "id": "1792425110562",
-            "name": "Biceps hantlem",
+            "name": "Uginanie hantli stojąc",
             "targetWeight": "12",
             "sets": 3,
             "reps": 10
