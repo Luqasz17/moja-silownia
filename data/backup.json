@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "exportedAt": "2026-11-07T12:08:03.516Z",
+  "exportedAt": "2026-11-07T12:08:09.429Z",
   "owner": "Luqasz17",
   "repo": "moja-silownia",
   "data": {
@@ -1145,6 +1145,182 @@
               {
                 "reps": "10",
                 "weight": "12",
+                "isCompleted": true
+              }
+            ]
+          },
+          {
+            "name": "Spięcia brzucha z hantlem leżąc",
+            "notes": "",
+            "targetSets": 3,
+            "targetReps": 20,
+            "targetWeight": "20",
+            "sets": [
+              {
+                "reps": "20",
+                "weight": "20",
+                "isCompleted": true
+              },
+              {
+                "reps": "20",
+                "weight": "20",
+                "isCompleted": true
+              },
+              {
+                "reps": "20",
+                "weight": "20",
+                "isCompleted": true
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "1794053285369",
+        "timestamp": 1794053285369,
+        "date": "07.11.2026",
+        "planName": "Trening A",
+        "exercises": [
+          {
+            "name": "Przysiady bułgarskie z hantlami",
+            "notes": "chyba jeszcze nigdy nie mialem ciezszego ćwiczenia jak to dzisiaj",
+            "targetSets": 3,
+            "targetReps": 10,
+            "targetWeight": "20",
+            "sets": [
+              {
+                "reps": "10",
+                "weight": "20",
+                "isCompleted": true
+              },
+              {
+                "reps": "10",
+                "weight": "20",
+                "isCompleted": true
+              },
+              {
+                "reps": "10",
+                "weight": "20",
+                "isCompleted": true
+              }
+            ]
+          },
+          {
+            "name": "Wyciskanie hantli na skosie dodatnim",
+            "notes": "ledwo co dalem radę strasznie ciężko",
+            "targetSets": 3,
+            "targetReps": 10,
+            "targetWeight": "20",
+            "sets": [
+              {
+                "reps": "10",
+                "weight": "20",
+                "isCompleted": true
+              },
+              {
+                "reps": "10",
+                "weight": "20",
+                "isCompleted": true
+              },
+              {
+                "reps": "10",
+                "weight": "20",
+                "isCompleted": true
+              }
+            ]
+          },
+          {
+            "name": "Przenoszenie hantla za głowę",
+            "notes": "ciezko",
+            "targetSets": 3,
+            "targetReps": 10,
+            "targetWeight": "28",
+            "sets": [
+              {
+                "reps": "10",
+                "weight": "28",
+                "isCompleted": true
+              },
+              {
+                "reps": "10",
+                "weight": "28",
+                "isCompleted": true
+              },
+              {
+                "reps": "10",
+                "weight": "28",
+                "isCompleted": true
+              }
+            ]
+          },
+          {
+            "name": "Odwrotne rozpiętki hantlami",
+            "notes": "",
+            "targetSets": 3,
+            "targetReps": 10,
+            "targetWeight": "7",
+            "sets": [
+              {
+                "reps": "10",
+                "weight": "7",
+                "isCompleted": true
+              },
+              {
+                "reps": "10",
+                "weight": "7",
+                "isCompleted": true
+              },
+              {
+                "reps": "10",
+                "weight": "7",
+                "isCompleted": true
+              }
+            ]
+          },
+          {
+            "name": "Wznosy hantli bokiem stojąc",
+            "notes": "chyba mozna wiecej",
+            "targetSets": 3,
+            "targetReps": 10,
+            "targetWeight": "7",
+            "sets": [
+              {
+                "reps": "10",
+                "weight": "7",
+                "isCompleted": true
+              },
+              {
+                "reps": "10",
+                "weight": "7",
+                "isCompleted": true
+              },
+              {
+                "reps": "10",
+                "weight": "7",
+                "isCompleted": true
+              }
+            ]
+          },
+          {
+            "name": "Francuz hantlami",
+            "notes": "upadek mięśniowy",
+            "targetSets": 3,
+            "targetReps": 12,
+            "targetWeight": "12",
+            "sets": [
+              {
+                "reps": "12",
+                "weight": "12",
+                "isCompleted": true
+              },
+              {
+                "reps": "12",
+                "weight": "12",
+                "isCompleted": true
+              },
+              {
+                "reps": "12",
+                "weight": "10",
                 "isCompleted": true
               }
             ]
