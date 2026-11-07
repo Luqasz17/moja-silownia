@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "exportedAt": "2026-11-07T12:14:00.021Z",
+  "exportedAt": "2026-11-07T12:15:30.543Z",
   "owner": "Luqasz17",
   "repo": "moja-silownia",
   "data": {
@@ -42,7 +42,7 @@
             "name": "Wznosy hantli bokiem stojąc",
             "targetWeight": "7",
             "sets": 3,
-            "reps": 10
+            "reps": 15
           },
           {
             "id": "1792425315601",
