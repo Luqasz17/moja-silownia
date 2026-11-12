@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "exportedAt": "2026-11-07T12:16:11.014Z",
+  "exportedAt": "2026-11-12T17:16:50.719Z",
   "owner": "Luqasz17",
   "repo": "moja-silownia",
   "data": {
@@ -26,14 +26,14 @@
           {
             "id": "1792425254077",
             "name": "Przenoszenie hantla za głowę",
-            "targetWeight": "28",
+            "targetWeight": "25",
             "sets": 3,
             "reps": 10
           },
           {
             "id": "1792425279268",
             "name": "Odwrotne rozpiętki hantlami",
-            "targetWeight": "7",
+            "targetWeight": "8",
             "sets": 3,
             "reps": 10
           },
@@ -70,28 +70,28 @@
             "name": "Rumuński martwy ciąg",
             "targetWeight": "57",
             "sets": 3,
-            "reps": 8
+            "reps": 10
           },
           {
             "id": "1792425026459",
             "name": "Wiosłowanie hantlem jednorącz",
-            "targetWeight": "22",
+            "targetWeight": "24",
             "sets": 3,
-            "reps": 12
+            "reps": 10
           },
           {
             "id": "1792425054397",
             "name": "Wyciskanie sztangi ławka płaska",
-            "targetWeight": "50",
+            "targetWeight": "52",
             "sets": 3,
             "reps": 8
           },
           {
             "id": "1792425080359",
             "name": "Rozpiętki hantlami na płaskiej",
-            "targetWeight": "12",
+            "targetWeight": "14",
             "sets": 3,
-            "reps": 12
+            "reps": 8
           },
           {
             "id": "1792425110562",
@@ -1321,6 +1321,358 @@
               {
                 "reps": "12",
                 "weight": "10",
+                "isCompleted": true
+              }
+            ]
+          },
+          {
+            "name": "Spięcia brzucha z hantlem leżąc",
+            "notes": "",
+            "targetSets": 3,
+            "targetReps": 20,
+            "targetWeight": "20",
+            "sets": [
+              {
+                "reps": "20",
+                "weight": "20",
+                "isCompleted": true
+              },
+              {
+                "reps": "20",
+                "weight": "20",
+                "isCompleted": true
+              },
+              {
+                "reps": "20",
+                "weight": "20",
+                "isCompleted": true
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "1794241227813",
+        "timestamp": 1794241227813,
+        "date": "09.11.2026",
+        "planName": "Trening B",
+        "exercises": [
+          {
+            "name": "Rumuński martwy ciąg",
+            "notes": "moze sprobujemy na 10 powtorzen",
+            "targetSets": 3,
+            "targetReps": 8,
+            "targetWeight": "57",
+            "sets": [
+              {
+                "reps": "8",
+                "weight": "57",
+                "isCompleted": true
+              },
+              {
+                "reps": "8",
+                "weight": "57",
+                "isCompleted": true
+              },
+              {
+                "reps": "8",
+                "weight": "57",
+                "isCompleted": true
+              }
+            ]
+          },
+          {
+            "name": "Wiosłowanie hantlem jednorącz",
+            "notes": "mozna dolozyc",
+            "targetSets": 3,
+            "targetReps": 12,
+            "targetWeight": "22",
+            "sets": [
+              {
+                "reps": "12",
+                "weight": "22",
+                "isCompleted": true
+              },
+              {
+                "reps": "12",
+                "weight": "22",
+                "isCompleted": true
+              },
+              {
+                "reps": "12",
+                "weight": "22",
+                "isCompleted": true
+              }
+            ]
+          },
+          {
+            "name": "Wyciskanie sztangi ławka płaska",
+            "notes": "w koncu jakis progres, 10 powtorzen w ostatniej serii",
+            "targetSets": 3,
+            "targetReps": 8,
+            "targetWeight": "50",
+            "sets": [
+              {
+                "reps": "8",
+                "weight": "50",
+                "isCompleted": true
+              },
+              {
+                "reps": "8",
+                "weight": "50",
+                "isCompleted": true
+              },
+              {
+                "reps": "10",
+                "weight": "50",
+                "isCompleted": true
+              }
+            ]
+          },
+          {
+            "name": "Rozpiętki hantlami na płaskiej",
+            "notes": "mozna chyba nieco dolozyc kg",
+            "targetSets": 3,
+            "targetReps": 12,
+            "targetWeight": "12",
+            "sets": [
+              {
+                "reps": "12",
+                "weight": "12",
+                "isCompleted": true
+              },
+              {
+                "reps": "12",
+                "weight": "12",
+                "isCompleted": true
+              },
+              {
+                "reps": "12",
+                "weight": "12",
+                "isCompleted": true
+              }
+            ]
+          },
+          {
+            "name": "Uginanie hantli stojąc",
+            "notes": "Dwie serie na modlitewniku z wlasnej nogi a ostatnia seria na stojąco bo bylo za ciezko",
+            "targetSets": 3,
+            "targetReps": 10,
+            "targetWeight": "12",
+            "sets": [
+              {
+                "reps": "10",
+                "weight": "12",
+                "isCompleted": true
+              },
+              {
+                "reps": "10",
+                "weight": "12",
+                "isCompleted": true
+              },
+              {
+                "reps": "10",
+                "weight": "12",
+                "isCompleted": true
+              }
+            ]
+          },
+          {
+            "name": "Uginanie młotkowe",
+            "notes": "ciezko i raczej bym na razie wolal dostosowac do ćwiczenia wyżej ciezar zeby nie przekladac",
+            "targetSets": 3,
+            "targetReps": 10,
+            "targetWeight": "12",
+            "sets": [
+              {
+                "reps": "10",
+                "weight": "12",
+                "isCompleted": true
+              },
+              {
+                "reps": "10",
+                "weight": "12",
+                "isCompleted": true
+              },
+              {
+                "reps": "10",
+                "weight": "12",
+                "isCompleted": true
+              }
+            ]
+          },
+          {
+            "name": "Spięcia brzucha z hantlem leżąc",
+            "notes": "",
+            "targetSets": 3,
+            "targetReps": 20,
+            "targetWeight": "20",
+            "sets": [
+              {
+                "reps": "20",
+                "weight": "20",
+                "isCompleted": true
+              },
+              {
+                "reps": "20",
+                "weight": "20",
+                "isCompleted": true
+              },
+              {
+                "reps": "20",
+                "weight": "20",
+                "isCompleted": true
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "1794503526560",
+        "timestamp": 1794503526560,
+        "date": "12.11.2026",
+        "planName": "Trening A",
+        "exercises": [
+          {
+            "name": "Przysiady bułgarskie z hantlami",
+            "notes": "ciezko",
+            "targetSets": 3,
+            "targetReps": 10,
+            "targetWeight": "20",
+            "sets": [
+              {
+                "reps": "10",
+                "weight": "20",
+                "isCompleted": true
+              },
+              {
+                "reps": "10",
+                "weight": "20",
+                "isCompleted": true
+              },
+              {
+                "reps": "10",
+                "weight": "20",
+                "isCompleted": true
+              }
+            ]
+          },
+          {
+            "name": "Wyciskanie hantli na skosie dodatnim",
+            "notes": "ledwo sie udalo ale poszlo",
+            "targetSets": 3,
+            "targetReps": 10,
+            "targetWeight": "20",
+            "sets": [
+              {
+                "reps": "10",
+                "weight": "20",
+                "isCompleted": true
+              },
+              {
+                "reps": "10",
+                "weight": "20",
+                "isCompleted": true
+              },
+              {
+                "reps": "10",
+                "weight": "20",
+                "isCompleted": true
+              }
+            ]
+          },
+          {
+            "name": "Przenoszenie hantla za głowę",
+            "notes": "zjechalem z ciezarem bo sie po prostu boje",
+            "targetSets": 3,
+            "targetReps": 10,
+            "targetWeight": "28",
+            "sets": [
+              {
+                "reps": "10",
+                "weight": "28",
+                "isCompleted": true
+              },
+              {
+                "reps": "10",
+                "weight": "28",
+                "isCompleted": true
+              },
+              {
+                "reps": "12",
+                "weight": "25",
+                "isCompleted": true
+              }
+            ]
+          },
+          {
+            "name": "Odwrotne rozpiętki hantlami",
+            "notes": "mozna dolozyc",
+            "targetSets": 3,
+            "targetReps": 10,
+            "targetWeight": "7",
+            "sets": [
+              {
+                "reps": "10",
+                "weight": "7",
+                "isCompleted": true
+              },
+              {
+                "reps": "10",
+                "weight": "7",
+                "isCompleted": true
+              },
+              {
+                "reps": "10",
+                "weight": "7",
+                "isCompleted": true
+              }
+            ]
+          },
+          {
+            "name": "Wznosy hantli bokiem stojąc",
+            "notes": "upadek mięśniowy",
+            "targetSets": 3,
+            "targetReps": 15,
+            "targetWeight": "7",
+            "sets": [
+              {
+                "reps": "15",
+                "weight": "7",
+                "isCompleted": true
+              },
+              {
+                "reps": "15",
+                "weight": "7",
+                "isCompleted": true
+              },
+              {
+                "reps": "12",
+                "weight": "7",
+                "isCompleted": true
+              }
+            ]
+          },
+          {
+            "name": "Francuz hantlami",
+            "notes": "upadek miesniowy",
+            "targetSets": 3,
+            "targetReps": 10,
+            "targetWeight": "12",
+            "sets": [
+              {
+                "reps": "10",
+                "weight": "12",
+                "isCompleted": true
+              },
+              {
+                "reps": "10",
+                "weight": "12",
+                "isCompleted": true
+              },
+              {
+                "reps": "10",
+                "weight": "12",
                 "isCompleted": true
               }
             ]
