@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "exportedAt": "2026-11-16T23:28:34.390Z",
+  "exportedAt": "2026-11-16T23:29:27.892Z",
   "owner": "Luqasz17",
   "repo": "moja-silownia",
   "data": {
@@ -216,6 +216,13 @@
             "id": "1794871710311",
             "name": "Wiosłowanie sztangą w opadzie tułowia RIR1",
             "targetWeight": "42",
+            "sets": 3,
+            "reps": 10
+          },
+          {
+            "id": "1794871763808",
+            "name": "Uginanie młotkowe z hantlami stojąc RIR0",
+            "targetWeight": "12",
             "sets": 3,
             "reps": 10
           }
