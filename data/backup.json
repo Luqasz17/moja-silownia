@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "exportedAt": "2026-11-16T23:24:00.904Z",
+  "exportedAt": "2026-11-16T23:25:00.262Z",
   "owner": "Luqasz17",
   "repo": "moja-silownia",
   "data": {
@@ -183,7 +183,15 @@
       {
         "id": "1794871436854",
         "name": "FBW B",
-        "exercises": [],
+        "exercises": [
+          {
+            "id": "1794871496187",
+            "name": "Wyciskanie hantli na ławce skośnej + RIR1",
+            "targetWeight": "20",
+            "sets": 3,
+            "reps": 10
+          }
+        ],
         "isHidden": false
       }
     ],
