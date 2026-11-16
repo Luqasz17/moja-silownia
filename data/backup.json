@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "exportedAt": "2026-11-16T23:33:17.738Z",
+  "exportedAt": "2026-11-16T23:34:35.947Z",
   "owner": "Luqasz17",
   "repo": "moja-silownia",
   "data": {
@@ -246,6 +246,13 @@
             "targetWeight": "52",
             "sets": 3,
             "reps": 8
+          },
+          {
+            "id": "1794872071855",
+            "name": "Ściąganie na górnym wąsko podchwytem RIR1",
+            "targetWeight": "35",
+            "sets": 3,
+            "reps": 10
           }
         ],
         "isHidden": false
