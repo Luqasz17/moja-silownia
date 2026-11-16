@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "exportedAt": "2026-11-16T23:32:39.363Z",
+  "exportedAt": "2026-11-16T23:33:17.738Z",
   "owner": "Luqasz17",
   "repo": "moja-silownia",
   "data": {
@@ -239,7 +239,15 @@
       {
         "id": "1794871855306",
         "name": "FBW C",
-        "exercises": [],
+        "exercises": [
+          {
+            "id": "1794871993658",
+            "name": "Wyciskanie sztangi płasko z pauzą RIR2",
+            "targetWeight": "52",
+            "sets": 3,
+            "reps": 8
+          }
+        ],
         "isHidden": false
       }
     ],
