@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "exportedAt": "2026-11-16T23:16:39.285Z",
+  "exportedAt": "2026-11-16T23:17:28.899Z",
   "owner": "Luqasz17",
   "repo": "moja-silownia",
   "data": {
@@ -127,6 +127,13 @@
             "targetWeight": "52",
             "sets": 3,
             "reps": 8
+          },
+          {
+            "id": "1794871044821",
+            "name": "Rozpiętki z hantlami płasko RIR0",
+            "targetWeight": "14",
+            "sets": 3,
+            "reps": 10
           }
         ],
         "isHidden": false
