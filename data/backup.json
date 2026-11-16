@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "exportedAt": "2026-11-16T23:30:06.494Z",
+  "exportedAt": "2026-11-16T23:30:38.083Z",
   "owner": "Luqasz17",
   "repo": "moja-silownia",
   "data": {
@@ -225,6 +225,13 @@
             "targetWeight": "12",
             "sets": 3,
             "reps": 10
+          },
+          {
+            "id": "1794871833987",
+            "name": "Allahy na wyciągu górnym RIR0",
+            "targetWeight": "40",
+            "sets": 3,
+            "reps": 15
           }
         ],
         "isHidden": false
