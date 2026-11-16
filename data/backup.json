@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "exportedAt": "2026-11-16T23:25:00.262Z",
+  "exportedAt": "2026-11-16T23:25:48.496Z",
   "owner": "Luqasz17",
   "repo": "moja-silownia",
   "data": {
@@ -190,6 +190,13 @@
             "targetWeight": "20",
             "sets": 3,
             "reps": 10
+          },
+          {
+            "id": "1794871544412",
+            "name": "Odwrotne rozpiętki w oparciu o ławkę skośną RIR0",
+            "targetWeight": "8",
+            "sets": 3,
+            "reps": 12
           }
         ],
         "isHidden": false
