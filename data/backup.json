@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "exportedAt": "2026-11-16T23:36:51.886Z",
+  "exportedAt": "2026-11-16T23:38:06.365Z",
   "owner": "Luqasz17",
   "repo": "moja-silownia",
   "data": {
@@ -267,6 +267,13 @@
             "targetWeight": "7",
             "sets": 3,
             "reps": 15
+          },
+          {
+            "id": "1794872282278",
+            "name": "Uginanie hantlem w oparciu o udo RIR0",
+            "targetWeight": "10",
+            "sets": 3,
+            "reps": 10
           }
         ],
         "isHidden": false
