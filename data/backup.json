@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "exportedAt": "2026-11-16T23:25:48.496Z",
+  "exportedAt": "2026-11-16T23:27:10.054Z",
   "owner": "Luqasz17",
   "repo": "moja-silownia",
   "data": {
@@ -197,6 +197,13 @@
             "targetWeight": "8",
             "sets": 3,
             "reps": 12
+          },
+          {
+            "id": "1794871625976",
+            "name": "Wyciskanie francuskie hantlami na ławce skośnej RIR1",
+            "targetWeight": "12",
+            "sets": 3,
+            "reps": 10
           }
         ],
         "isHidden": false
