@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "exportedAt": "2026-11-16T23:19:21.433Z",
+  "exportedAt": "2026-11-16T23:20:22.646Z",
   "owner": "Luqasz17",
   "repo": "moja-silownia",
   "data": {
@@ -139,6 +139,13 @@
             "id": "1794871157347",
             "name": "Ściąganie na górnym szeroko RIR1",
             "targetWeight": "35",
+            "sets": 3,
+            "reps": 10
+          },
+          {
+            "id": "1794871218599",
+            "name": "Przysiady bułgarskie z hantlami RIR2",
+            "targetWeight": "20",
             "sets": 3,
             "reps": 10
           }
