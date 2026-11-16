@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "exportedAt": "2026-11-16T23:35:09.650Z",
+  "exportedAt": "2026-11-16T23:36:05.610Z",
   "owner": "Luqasz17",
   "repo": "moja-silownia",
   "data": {
@@ -253,6 +253,13 @@
             "targetWeight": "35",
             "sets": 3,
             "reps": 10
+          },
+          {
+            "id": "1794872161532",
+            "name": "Przysiad goblet z jednym hantlem RIR2",
+            "targetWeight": "24",
+            "sets": 3,
+            "reps": 12
           }
         ],
         "isHidden": false
