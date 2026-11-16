@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "exportedAt": "2026-11-16T23:23:18.816Z",
+  "exportedAt": "2026-11-16T23:24:00.904Z",
   "owner": "Luqasz17",
   "repo": "moja-silownia",
   "data": {
@@ -178,6 +178,12 @@
             "reps": 15
           }
         ],
+        "isHidden": false
+      },
+      {
+        "id": "1794871436854",
+        "name": "FBW B",
+        "exercises": [],
         "isHidden": false
       }
     ],
