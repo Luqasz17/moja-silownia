@@ -1,7 +1,7 @@
 import { Ionicons } from '@expo/vector-icons';
 import { Tabs } from 'expo-router';
-import React, { useContext } from 'react';
-import { ThemeContext } from '../ThemeContext';
+import { useContext } from 'react';
+import { ThemeContext } from '../../context/ThemeContext';
 
 export default function TabLayout() {
   const { colors } = useContext(ThemeContext);
