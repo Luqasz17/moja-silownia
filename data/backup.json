@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "exportedAt": "2026-11-20T19:35:22.309Z",
+  "exportedAt": "2026-11-20T20:25:07.121Z",
   "owner": "Luqasz17",
   "repo": "moja-silownia",
   "data": {
@@ -124,7 +124,7 @@
           {
             "id": "1794870995201",
             "name": "Wyciskanie sztangi płasko z pauzą RIR2",
-            "targetWeight": "52",
+            "targetWeight": 52,
             "sets": 3,
             "reps": 8
           },
@@ -136,17 +136,17 @@
             "reps": 11
           },
           {
-            "id": "1794871157347",
-            "name": "Ściąganie na górnym szeroko RIR1",
-            "targetWeight": "37",
-            "sets": 3,
-            "reps": 10
-          },
-          {
             "id": "1794871218599",
             "name": "Przysiady bułgarskie z hantlami RIR2",
             "targetWeight": "20",
             "sets": 4,
+            "reps": 10
+          },
+          {
+            "id": "1794871304156",
+            "name": "Uginanie przedramion hantlami stojąc RIR0",
+            "targetWeight": "12",
+            "sets": 3,
             "reps": 10
           },
           {
@@ -157,9 +157,9 @@
             "reps": 15
           },
           {
-            "id": "1794871304156",
-            "name": "Uginanie przedramion hantlami stojąc RIR0",
-            "targetWeight": "12",
+            "id": "1794871157347",
+            "name": "Ściąganie na górnym szeroko RIR1",
+            "targetWeight": "37",
             "sets": 3,
             "reps": 10
           },
@@ -185,16 +185,23 @@
             "reps": 10
           },
           {
-            "id": "1794871544412",
-            "name": "Odwrotne rozpiętki w oparciu o ławkę skośną RIR0",
-            "targetWeight": "10",
+            "id": "1794871625976",
+            "name": "Wyciskanie francuskie hantlami na ławce skośnej RIR1",
+            "targetWeight": "14",
             "sets": 3,
             "reps": 10
           },
           {
-            "id": "1794871625976",
-            "name": "Wyciskanie francuskie hantlami na ławce skośnej RIR1",
+            "id": "1794871763808",
+            "name": "Uginanie młotkowe z hantlami stojąc RIR0",
             "targetWeight": "14",
+            "sets": 3,
+            "reps": 8
+          },
+          {
+            "id": "1794871544412",
+            "name": "Odwrotne rozpiętki w oparciu o ławkę skośną RIR0",
+            "targetWeight": "10",
             "sets": 3,
             "reps": 10
           },
@@ -211,13 +218,6 @@
             "targetWeight": "42",
             "sets": 3,
             "reps": 10
-          },
-          {
-            "id": "1794871763808",
-            "name": "Uginanie młotkowe z hantlami stojąc RIR0",
-            "targetWeight": "14",
-            "sets": 3,
-            "reps": 8
           },
           {
             "id": "1794871833987",
@@ -241,25 +241,11 @@
             "reps": 8
           },
           {
-            "id": "1794872071855",
-            "name": "Ściąganie na górnym wąsko podchwytem RIR1",
-            "targetWeight": "37",
-            "sets": 3,
-            "reps": 10
-          },
-          {
             "id": "1794872161532",
             "name": "Przysiad goblet z jednym hantlem RIR2",
             "targetWeight": "24",
             "sets": 3,
             "reps": 12
-          },
-          {
-            "id": "1794872207795",
-            "name": "Wznosy hantli bokiem stojąc RIR0",
-            "targetWeight": "7",
-            "sets": 3,
-            "reps": 15
           },
           {
             "id": "1794872282278",
@@ -269,11 +255,18 @@
             "reps": 10
           },
           {
-            "id": "1794872332216",
-            "name": "Prostowanie ramion na wyciągu górnym RIR0",
-            "targetWeight": "20",
+            "id": "1794872207795",
+            "name": "Wznosy hantli bokiem stojąc RIR0",
+            "targetWeight": "7",
             "sets": 3,
-            "reps": 12
+            "reps": 15
+          },
+          {
+            "id": "1794872071855",
+            "name": "Ściąganie na górnym wąsko podchwytem RIR1",
+            "targetWeight": "37",
+            "sets": 3,
+            "reps": 10
           },
           {
             "id": "1794872384080",
@@ -281,6 +274,13 @@
             "targetWeight": "30",
             "sets": 3,
             "reps": 18
+          },
+          {
+            "id": "1794872332216",
+            "name": "Prostowanie ramion na wyciągu górnym RIR0",
+            "targetWeight": "20",
+            "sets": 3,
+            "reps": 12
           }
         ],
         "isHidden": false
