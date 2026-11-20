@@ -1,24 +1,53 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import * as Haptics from 'expo-haptics';
 import { router, useFocusEffect } from 'expo-router';
-import React, { useCallback, useContext, useEffect, useMemo, useState } from 'react';
-import { ActionSheetIOS, Alert, KeyboardAvoidingView, Platform, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import { useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react';
+import {
+  ActionSheetIOS,
+  Alert,
+  KeyboardAvoidingView,
+  Modal,
+  PanResponder,
+  Platform,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 
+import { ThemeContext } from '../../context/ThemeContext';
+import { SyncEvents } from '../../hooks/SyncEvents';
 
-import { ThemeContext } from '../ThemeContext';
+interface Exercise {
+  id: string;
+  name: string;
+  targetWeight: string | number;
+  sets: number;
+  reps: number;
+}
+
+interface Plan {
+  id: string;
+  name: string;
+  exercises: Exercise[];
+  isHidden?: boolean;
+}
 
 export default function HomeScreen() {
   const { colors } = useContext(ThemeContext);
   const styles = useMemo(() => getStyles(colors), [colors]);
 
-  const [plans, setPlans] = useState([]);
-  const [activePlanId, setActivePlanId] = useState(null);
-  const [currentActiveWorkoutId, setCurrentActiveWorkoutId] = useState(null);
+  const [plans, setPlans] = useState<Plan[]>([]);
+  const [activePlanId, setActivePlanId] = useState<string | null>(null);
+  const [currentActiveWorkoutId, setCurrentActiveWorkoutId] = useState<string | null>(null);
 
   const [isCreatingPlan, setIsCreatingPlan] = useState(false);
-  const [editingPlanId, setEditingPlanId] = useState(null);
+  const [editingPlanId, setEditingPlanId] = useState<string | null>(null);
 
   const [isCreatingExercise, setIsCreatingExercise] = useState(false);
-  const [editingExerciseId, setEditingExerciseId] = useState(null);
+  const [editingExerciseId, setEditingExerciseId] = useState<string | null>(null);
 
   const [newPlanName, setNewPlanName] = useState('');
   const [newName, setNewName] = useState('');
@@ -30,8 +59,34 @@ export default function HomeScreen() {
 
   const [showHiddenPlans, setShowHiddenPlans] = useState(false);
   
-  const [lastDeletedPlan, setLastDeletedPlan] = useState(null);
+  const [lastDeletedPlan, setLastDeletedPlan] = useState<Plan | null>(null);
   const [undoSeconds, setUndoSeconds] = useState(0);
+
+  // Szybka edycja & Zmiana kolejności
+  const [quickEditExercise, setQuickEditExercise] = useState<Exercise | null>(null);
+  const [isReorderMode, setIsReorderMode] = useState(false);
+  const [highlightedExerciseId, setHighlightedExerciseId] = useState<string | null>(null);
+  const [activeDragIndex, setActiveDragIndex] = useState<number | null>(null);
+
+  const plansRef = useRef(plans);
+  plansRef.current = plans;
+
+  const activePlanIdRef = useRef(activePlanId);
+  activePlanIdRef.current = activePlanId;
+
+  const containerRef = useRef<any>(null);
+  const containerPageYRef = useRef<number>(0);
+  const itemLayouts = useRef<{ y: number; height: number }[]>([]);
+  const startYRef = useRef<number>(0);
+  const activeDragIndexRef = useRef<number | null>(null);
+
+  const updateContainerPageY = () => {
+    containerRef.current?.measureInWindow((x: number, y: number) => {
+      if (typeof y === 'number' && y > 0) {
+        containerPageYRef.current = y;
+      }
+    });
+  };
 
   const defaultNote = "Kalorie: 2500 kcal dziennie.\nBiałko: 160 g (klucz do budowy klatki i ramion).\nTłuszcze: 70 g\nWęglowodany: ok. 300 g (z priorytetem w posiłkach okołotreningowych)\n\nSuplementy:\nKreatyna (5 g dziennie), tran, rutinoscorbin oraz odżywka białkowa według potrzeb\n\n1.5h przed treningiem:\nok. 60-80 g węglowodanów (np. 80 g ryżu/makaronu + chude mięso).\n\n30 min po treningu:\nOdżywka białkowa + banan.\n\nKolacja po treningu:\n100 g węglowodanów (np. solidna porcja ziemniaków lub kaszy) i 40-50 g białka.\n\nSen: 6.5-7 godzin";
 
@@ -62,7 +117,7 @@ export default function HomeScreen() {
             const parsed = JSON.parse(savedPlans);
             setPlans(parsed);
             if (parsed.length > 0 && !activePlanId) {
-              const firstVisible = parsed.find(p => !p.isHidden);
+              const firstVisible = parsed.find((p: Plan) => !p.isHidden);
               setActivePlanId(firstVisible ? firstVisible.id : parsed[0].id);
             }
           }
@@ -73,21 +128,22 @@ export default function HomeScreen() {
   );
 
   useEffect(() => {
-    let interval = null;
+    let interval: ReturnType<typeof setInterval> | null = null;
     if (undoSeconds > 0) {
       interval = setInterval(() => {
         setUndoSeconds(prev => prev - 1);
       }, 1000);
     } else {
       setLastDeletedPlan(null);
-      clearInterval(interval);
+      if (interval) clearInterval(interval);
     }
-    return () => clearInterval(interval);
+    return () => { if (interval) clearInterval(interval); };
   }, [undoSeconds]);
 
-  const savePlans = async (updatedPlans) => {
+  const savePlans = async (updatedPlans: Plan[]) => {
     setPlans(updatedPlans);
     await AsyncStorage.setItem('workoutPlans', JSON.stringify(updatedPlans));
+    SyncEvents.emitDataChanged();
   };
 
   const addPlan = () => {
@@ -95,11 +151,11 @@ export default function HomeScreen() {
       Alert.alert("Błąd", "Podaj nazwę nowego planu!");
       return;
     }
-    let updatedPlans;
+    let updatedPlans: Plan[];
     if (editingPlanId) {
       updatedPlans = plans.map(p => p.id === editingPlanId ? { ...p, name: newPlanName } : p);
     } else {
-      const newPlan = { id: Date.now().toString(), name: newPlanName, exercises: [], isHidden: false };
+      const newPlan: Plan = { id: Date.now().toString(), name: newPlanName, exercises: [], isHidden: false };
       updatedPlans = [...plans, newPlan];
       setActivePlanId(newPlan.id);
     }
@@ -112,7 +168,7 @@ export default function HomeScreen() {
   const visiblePlans = plans.filter(p => !p.isHidden);
   const hiddenPlans = plans.filter(p => p.isHidden);
 
-  const movePlan = (dir, plan) => {
+  const movePlan = (dir: 'left' | 'right', plan: Plan) => {
     const isHidden = plan.isHidden;
     const targetArray = isHidden ? [...hiddenPlans] : [...visiblePlans];
     const idx = targetArray.findIndex(p => p.id === plan.id);
@@ -127,12 +183,12 @@ export default function HomeScreen() {
     savePlans(newPlans);
   };
 
-  const toggleHidePlan = (plan) => {
+  const toggleHidePlan = (plan: Plan) => {
     const updated = plans.map(p => p.id === plan.id ? { ...p, isHidden: !p.isHidden } : p);
     savePlans(updated);
   };
 
-  const confirmDeletePlan = (plan) => {
+  const confirmDeletePlan = (plan: Plan) => {
     setTimeout(() => {
       Alert.alert("Usuń plan", "Czy na pewno chcesz usunąć ten plan i wszystkie jego ćwiczenia?", [
         { text: "Anuluj", style: "cancel" },
@@ -151,7 +207,7 @@ export default function HomeScreen() {
   };
 
   
-  const handleLongPressPlan = (plan) => {
+  const handleLongPressPlan = (plan: Plan) => {
     if (Platform.OS === 'ios') {
       const targetList = plan.isHidden ? hiddenPlans : visiblePlans;
       const currentListIndex = targetList.findIndex(p => p.id === plan.id);
@@ -238,7 +294,7 @@ export default function HomeScreen() {
     cancelExerciseForm();
   };
 
-  const editExercise = (exercise) => {
+  const editExercise = (exercise: Exercise) => {
     setEditingExerciseId(exercise.id);
     setNewName(exercise.name);
     setNewWeight(exercise.targetWeight.toString());
@@ -247,7 +303,7 @@ export default function HomeScreen() {
     setIsCreatingExercise(true);
   };
 
-  const removeExercise = async (exerciseId) => {
+  const removeExercise = async (exerciseId: string) => {
     const updatedPlans = plans.map(p => {
       if (p.id === activePlanId) {
         return { ...p, exercises: p.exercises.filter(e => e.id !== exerciseId) };
@@ -267,7 +323,135 @@ export default function HomeScreen() {
     setNewName(''); setNewWeight(''); setNewSets(''); setNewReps('');
   };
 
+  const findIndexAtY = (y: number, count: number) => {
+    if (count <= 1) return 0;
+    for (let i = 0; i < count; i++) {
+      const l = itemLayouts.current[i];
+      if (l) {
+        const top = l.y;
+        const bottom = l.y + l.height + 8;
+        if (y >= top && y <= bottom) {
+          return i;
+        }
+      }
+    }
+    const last = itemLayouts.current[count - 1];
+    if (last && y >= last.y + last.height) {
+      return count - 1;
+    }
+    if (y <= 0) return 0;
+    const rowH = itemLayouts.current[0]?.height ? itemLayouts.current[0].height + 8 : 64;
+    const approx = Math.floor(y / rowH);
+    return Math.min(Math.max(0, approx), count - 1);
+  };
+
+  const reorderPanResponder = useMemo(
+    () =>
+      PanResponder.create({
+        onStartShouldSetPanResponder: () => true,
+        onMoveShouldSetPanResponder: () => true,
+        onPanResponderGrant: (evt) => {
+          let currentY = evt.nativeEvent.locationY;
+          if (containerPageYRef.current > 0 && evt.nativeEvent.pageY > 0) {
+            const calcY = evt.nativeEvent.pageY - containerPageYRef.current;
+            if (calcY >= 0) {
+              currentY = calcY;
+            }
+          }
+          startYRef.current = currentY;
+
+          const currentPlan = plansRef.current.find(p => p.id === activePlanIdRef.current);
+          const count = currentPlan?.exercises.length || 0;
+          const idx = findIndexAtY(currentY, count);
+          activeDragIndexRef.current = idx;
+          setActiveDragIndex(idx);
+
+          if (currentPlan && currentPlan.exercises[idx]) {
+            setHighlightedExerciseId(currentPlan.exercises[idx].id);
+          }
+          Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+        },
+        onPanResponderMove: (evt, gestureState) => {
+          const curIdx = activeDragIndexRef.current;
+          if (curIdx === null) return;
+
+          let currentY = startYRef.current + gestureState.dy;
+          if (containerPageYRef.current > 0 && evt.nativeEvent.pageY > 0) {
+            currentY = evt.nativeEvent.pageY - containerPageYRef.current;
+          }
+
+          const currentPlan = plansRef.current.find(p => p.id === activePlanIdRef.current);
+          if (!currentPlan) return;
+          const count = currentPlan.exercises.length;
+          const targetIdx = findIndexAtY(currentY, count);
+
+          if (targetIdx !== curIdx && targetIdx >= 0 && targetIdx < count) {
+            const newExs = [...currentPlan.exercises];
+            const [movedItem] = newExs.splice(curIdx, 1);
+            newExs.splice(targetIdx, 0, movedItem);
+            activeDragIndexRef.current = targetIdx;
+            setActiveDragIndex(targetIdx);
+
+            const updatedPlans = plansRef.current.map(p =>
+              p.id === activePlanIdRef.current ? { ...p, exercises: newExs } : p
+            );
+            setPlans(updatedPlans);
+            Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+          }
+        },
+        onPanResponderRelease: () => {
+          activeDragIndexRef.current = null;
+          setActiveDragIndex(null);
+          savePlans(plansRef.current);
+          Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
+          setTimeout(updateContainerPageY, 80);
+        },
+        onPanResponderTerminate: () => {
+          activeDragIndexRef.current = null;
+          setActiveDragIndex(null);
+        },
+      }),
+    []
+  );
+
+  const adjustQuickEdit = async (field: 'sets' | 'reps' | 'targetWeight', delta: number) => {
+    if (!quickEditExercise || !activePlanId) return;
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+
+    let updatedEx: Exercise | null = null;
+    const updatedPlans = plans.map(p => {
+      if (p.id !== activePlanId) return p;
+      return {
+        ...p,
+        exercises: p.exercises.map(e => {
+          if (e.id !== quickEditExercise.id) return e;
+          if (field === 'sets') {
+            const newVal = Math.max(1, (Number(e.sets) || 1) + delta);
+            updatedEx = { ...e, sets: newVal };
+          } else if (field === 'reps') {
+            const newVal = Math.max(1, (Number(e.reps) || 1) + delta);
+            updatedEx = { ...e, reps: newVal };
+          } else {
+            const cur = parseFloat(String(e.targetWeight).replace(',', '.')) || 0;
+            const newVal = Math.max(0, parseFloat((cur + delta).toFixed(2)));
+            updatedEx = { ...e, targetWeight: newVal };
+          }
+          return updatedEx;
+        }),
+      };
+    });
+
+    if (updatedEx) {
+      setQuickEditExercise(updatedEx);
+      savePlans(updatedPlans);
+      if (activePlanId === currentActiveWorkoutId) {
+        await AsyncStorage.removeItem('ongoingWorkoutState');
+      }
+    }
+  };
+
   const startWorkout = async () => {
+    if (!activePlanId) return;
     if (currentActiveWorkoutId && currentActiveWorkoutId !== activePlanId) {
       const currentlyRunningPlan = plans.find(p => p.id === currentActiveWorkoutId);
       const currentPlanName = currentlyRunningPlan ? currentlyRunningPlan.name : "Nieznany plan";
@@ -317,7 +501,7 @@ export default function HomeScreen() {
   return (
     <View style={{ flex: 1, backgroundColor: colors.background }}>
       <KeyboardAvoidingView style={{ flex: 1 }} behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
-        <ScrollView style={styles.container} keyboardShouldPersistTaps="handled">
+        <ScrollView style={styles.container} scrollEnabled={!isReorderMode} keyboardShouldPersistTaps="handled">
           <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 20 }}>
             <Text style={styles.headerTitle}>Moje plany</Text>
             <TouchableOpacity onPress={showReminder} style={{ backgroundColor: colors.cardSecondary, padding: 10, borderRadius: 20 }}>
@@ -385,26 +569,65 @@ export default function HomeScreen() {
                   {isCurrentlyWorkedOut && <View style={styles.activeBadgeSmall}><Text style={styles.activeBadgeSmallText}>AKTYWNY</Text></View>}
                 </View>
 
+                {isReorderMode && (
+                  <View style={styles.reorderBar}>
+                    <Text style={styles.reorderBarTitle}>Przeciągnij ćwiczenie w górę lub w dół</Text>
+                    <TouchableOpacity
+                      style={styles.reorderDoneBtn}
+                      onPress={() => {
+                        setIsReorderMode(false);
+                        setHighlightedExerciseId(null);
+                        setActiveDragIndex(null);
+                        Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+                      }}
+                      activeOpacity={0.7}
+                    >
+                      <Text style={styles.reorderDoneBtnText}>Gotowe</Text>
+                    </TouchableOpacity>
+                  </View>
+                )}
+
                 {activePlan.exercises.length === 0 ? (
                   <Text style={styles.emptyText}>Brak ćwiczeń. Dodaj coś poniżej!</Text>
                 ) : (
-                  activePlan.exercises.map((exercise, index) => (
-                    <View key={exercise.id} style={styles.exerciseRow}>
-                      <View style={styles.exerciseInfo}>
-                        <Text style={styles.exerciseName}>{index + 1}. {exercise.name}</Text>
-                        <Text style={styles.exerciseDetails}>{exercise.sets} serie x {exercise.reps} powt. | {exercise.targetWeight} kg</Text>
-                      </View>
-                      
-                      <View style={styles.actionButtons}>
-                        <TouchableOpacity onPress={() => editExercise(exercise)} style={styles.editButton}>
-                          <Text style={styles.editButtonText}>Edytuj</Text>
+                  <View
+                    ref={containerRef}
+                    pointerEvents={isReorderMode ? "box-only" : "auto"}
+                    onLayout={updateContainerPageY}
+                    {...(isReorderMode ? reorderPanResponder.panHandlers : {})}
+                  >
+                    {activePlan.exercises.map((exercise, index) => (
+                      <View
+                        key={exercise.id}
+                        onLayout={(e) => {
+                          itemLayouts.current[index] = e.nativeEvent.layout;
+                        }}
+                        style={[
+                          styles.exerciseRow,
+                          isReorderMode && styles.exerciseRowReorder,
+                          activeDragIndex === index && styles.exerciseRowDragging,
+                          highlightedExerciseId === exercise.id && !activeDragIndex && styles.exerciseRowHighlighted,
+                        ]}
+                      >
+                        <TouchableOpacity
+                          activeOpacity={isReorderMode ? 1 : 0.7}
+                          onLongPress={() => {
+                            if (!isReorderMode) {
+                              setQuickEditExercise(exercise);
+                              Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+                            }
+                          }}
+                          delayLongPress={300}
+                          style={{ flex: 1 }}
+                        >
+                          <View style={styles.exerciseInfo}>
+                            <Text style={styles.exerciseName}>{index + 1}. {exercise.name}</Text>
+                            <Text style={styles.exerciseDetails}>{exercise.sets} serie × {exercise.reps} powt. | {exercise.targetWeight} kg</Text>
+                          </View>
                         </TouchableOpacity>
-                        <TouchableOpacity onPress={() => removeExercise(exercise.id)} style={styles.deleteButton}>
-                          <Text style={styles.deleteButtonText}>Usuń</Text>
-                        </TouchableOpacity>
                       </View>
-                    </View>
-                  ))
+                    ))}
+                  </View>
                 )}
               </View>
 
@@ -463,11 +686,165 @@ export default function HomeScreen() {
           </TouchableOpacity>
         </View>
       )}
+
+      {/* Minimalistyczny Quick Edit Modal w stylu iOS */}
+      <Modal
+        visible={!!quickEditExercise}
+        transparent
+        animationType="fade"
+        onRequestClose={() => setQuickEditExercise(null)}
+      >
+        <KeyboardAvoidingView
+          behavior={Platform.OS === 'ios' ? 'padding' : undefined}
+          style={styles.modalOverlay}
+        >
+          <TouchableOpacity
+            activeOpacity={1}
+            style={styles.modalBackdrop}
+            onPress={() => setQuickEditExercise(null)}
+          />
+          <View style={styles.modalContent}>
+            {/* Nagłówek: nazwa i na żywo aktualizowane parametry */}
+            <View style={styles.modalHeader}>
+              <Text style={styles.modalTitle} numberOfLines={2}>
+                {quickEditExercise?.name}
+              </Text>
+              <Text style={styles.modalSubtitle}>
+                {quickEditExercise?.sets} serie · {quickEditExercise?.reps} powt. · {quickEditExercise?.targetWeight} kg
+              </Text>
+            </View>
+
+            <View style={styles.modalSeparator} />
+
+            {/* Przyciski szybkiej regulacji */}
+            <View style={styles.stepperRow}>
+              <Text style={styles.stepperLabel}>Serie</Text>
+              <View style={styles.stepperControls}>
+                <TouchableOpacity
+                  style={styles.stepperBtn}
+                  onPress={() => adjustQuickEdit('sets', -1)}
+                  activeOpacity={0.6}
+                >
+                  <Text style={styles.stepperBtnText}>–</Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  style={styles.stepperBtn}
+                  onPress={() => adjustQuickEdit('sets', 1)}
+                  activeOpacity={0.6}
+                >
+                  <Text style={styles.stepperBtnText}>+</Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+
+            <View style={styles.stepperRow}>
+              <Text style={styles.stepperLabel}>Powtórzenia</Text>
+              <View style={styles.stepperControls}>
+                <TouchableOpacity
+                  style={styles.stepperBtn}
+                  onPress={() => adjustQuickEdit('reps', -1)}
+                  activeOpacity={0.6}
+                >
+                  <Text style={styles.stepperBtnText}>–</Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  style={styles.stepperBtn}
+                  onPress={() => adjustQuickEdit('reps', 1)}
+                  activeOpacity={0.6}
+                >
+                  <Text style={styles.stepperBtnText}>+</Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+
+            <View style={styles.stepperRow}>
+              <Text style={styles.stepperLabel}>Ciężar</Text>
+              <View style={styles.stepperControls}>
+                <TouchableOpacity
+                  style={styles.stepperBtnWide}
+                  onPress={() => adjustQuickEdit('targetWeight', -0.5)}
+                  activeOpacity={0.6}
+                >
+                  <Text style={styles.stepperBtnWideText}>– 0.5 kg</Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  style={styles.stepperBtnWide}
+                  onPress={() => adjustQuickEdit('targetWeight', 0.5)}
+                  activeOpacity={0.6}
+                >
+                  <Text style={styles.stepperBtnWideText}>+ 0.5 kg</Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+
+            <View style={styles.modalSeparator} />
+
+            {/* Opcje */}
+            <TouchableOpacity
+              style={styles.modalActionRow}
+              onPress={() => {
+                const ex = quickEditExercise;
+                setQuickEditExercise(null);
+                if (ex) {
+                  setIsReorderMode(true);
+                  setHighlightedExerciseId(ex.id);
+                  Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+                  setTimeout(updateContainerPageY, 60);
+                }
+              }}
+              activeOpacity={0.7}
+            >
+              <Text style={styles.modalActionText}>Zmień kolejność</Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity
+              style={styles.modalActionRow}
+              onPress={() => {
+                const ex = quickEditExercise;
+                setQuickEditExercise(null);
+                if (ex) editExercise(ex);
+              }}
+              activeOpacity={0.7}
+            >
+              <Text style={styles.modalActionText}>Pełna edycja</Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity
+              style={styles.modalActionRow}
+              onPress={() => {
+                const ex = quickEditExercise;
+                setQuickEditExercise(null);
+                if (ex) {
+                  setTimeout(() => {
+                    Alert.alert('Usuń ćwiczenie', `Czy na pewno chcesz usunąć „${ex.name}"?`, [
+                      { text: 'Anuluj', style: 'cancel' },
+                      { text: 'Usuń', style: 'destructive', onPress: () => removeExercise(ex.id) },
+                    ]);
+                  }, 200);
+                }
+              }}
+              activeOpacity={0.7}
+            >
+              <Text style={[styles.modalActionText, { color: colors.danger }]}>Usuń ćwiczenie</Text>
+            </TouchableOpacity>
+
+            <View style={styles.modalSeparator} />
+
+            <TouchableOpacity
+              style={styles.modalDoneButton}
+              onPress={() => setQuickEditExercise(null)}
+              activeOpacity={0.7}
+            >
+              <Text style={styles.modalDoneButtonText}>Gotowe</Text>
+            </TouchableOpacity>
+          </View>
+        </KeyboardAvoidingView>
+      </Modal>
     </View>
   );
 }
 
-const getStyles = (colors) => StyleSheet.create({
+const getStyles = (colors: any) => StyleSheet.create({
   container: { flex: 1, padding: 15, paddingTop: 55, backgroundColor: colors.background },
   headerTitle: { fontSize: 26, fontWeight: 'bold', marginBottom: 15, color: colors.text },
   planSelector: { marginBottom: 10 },
@@ -499,10 +876,59 @@ const getStyles = (colors) => StyleSheet.create({
   activeBadgeSmall: { backgroundColor: colors.success, paddingVertical: 4, paddingHorizontal: 8, borderRadius: 8 },
   activeBadgeSmallText: { color: '#fff', fontSize: 10, fontWeight: 'bold', letterSpacing: 0.5 },
   emptyText: { fontStyle: 'italic', color: colors.textMuted, textAlign: 'center', marginTop: 10, fontSize: 14, marginBottom: 15 },
-  exerciseRow: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', backgroundColor: colors.card, padding: 12, borderRadius: 10, marginBottom: 8 },
+
+  reorderBar: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    backgroundColor: colors.cardSecondary,
+    paddingVertical: 8,
+    paddingHorizontal: 12,
+    borderRadius: 8,
+    marginBottom: 10,
+    borderWidth: 1,
+    borderColor: colors.primary,
+  },
+  reorderBarTitle: { fontSize: 13, color: colors.text, fontWeight: '500' },
+  reorderDoneBtn: {
+    backgroundColor: colors.primary,
+    paddingVertical: 5,
+    paddingHorizontal: 12,
+    borderRadius: 6,
+  },
+  reorderDoneBtnText: { color: '#fff', fontSize: 13, fontWeight: 'bold' },
+
+  exerciseRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: colors.card,
+    padding: 14,
+    borderRadius: 10,
+    marginBottom: 8,
+    borderWidth: 1,
+    borderColor: 'transparent',
+  },
+  exerciseRowReorder: {
+    borderColor: colors.border,
+  },
+  exerciseRowDragging: {
+    backgroundColor: colors.cardSecondary,
+    borderColor: colors.primary,
+    borderWidth: 1.5,
+    transform: [{ scale: 1.02 }],
+    shadowColor: '#000',
+    shadowOpacity: 0.2,
+    shadowRadius: 8,
+    elevation: 6,
+    zIndex: 10,
+  },
+  exerciseRowHighlighted: {
+    borderColor: colors.primary,
+  },
   exerciseInfo: { flex: 1 },
   exerciseName: { fontSize: 16, fontWeight: 'bold', color: colors.text, marginBottom: 2 },
   exerciseDetails: { fontSize: 13, color: colors.textMuted },
+
   actionButtons: { flexDirection: 'row', alignItems: 'center' },
   editButton: { backgroundColor: colors.cardSecondary, paddingVertical: 6, paddingHorizontal: 12, borderRadius: 8, marginLeft: 8, borderWidth: 1, borderColor: colors.border },
   editButtonText: { color: colors.text, fontSize: 12, fontWeight: 'bold' },
@@ -513,5 +939,123 @@ const getStyles = (colors) => StyleSheet.create({
   startButtonText: { color: '#fff', fontWeight: '900', fontSize: 16, letterSpacing: 1 },
   cancelActiveBtn: { alignItems: 'center', paddingVertical: 10 },
   cancelActiveBtnText: { color: colors.danger, fontWeight: 'bold', fontSize: 14 },
-  undoBar: { position: 'absolute', bottom: 20, left: 20, right: 20, backgroundColor: '#222', padding: 15, borderRadius: 10, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', elevation: 5, zIndex: 100 }
+  undoBar: { position: 'absolute', bottom: 20, left: 20, right: 20, backgroundColor: '#222', padding: 15, borderRadius: 10, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', elevation: 5, zIndex: 100 },
+
+  modalOverlay: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(0, 0, 0, 0.45)',
+    padding: 20,
+  },
+  modalBackdrop: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+  },
+  modalContent: {
+    backgroundColor: colors.card,
+    borderRadius: 16,
+    padding: 16,
+    width: '100%',
+    maxWidth: 340,
+    borderWidth: 1,
+    borderColor: colors.border,
+    shadowColor: '#000',
+    shadowOpacity: 0.2,
+    shadowRadius: 12,
+    elevation: 8,
+  },
+  modalHeader: {
+    alignItems: 'center',
+    paddingVertical: 4,
+  },
+  modalTitle: {
+    fontSize: 17,
+    fontWeight: '600',
+    color: colors.text,
+    textAlign: 'center',
+    marginBottom: 4,
+  },
+  modalSubtitle: {
+    fontSize: 13,
+    color: colors.textMuted,
+    textAlign: 'center',
+  },
+  modalSeparator: {
+    height: StyleSheet.hairlineWidth,
+    backgroundColor: colors.border,
+    marginVertical: 10,
+  },
+  stepperRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    paddingVertical: 5,
+  },
+  stepperLabel: {
+    fontSize: 14,
+    color: colors.text,
+    fontWeight: '500',
+  },
+  stepperControls: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  stepperBtn: {
+    backgroundColor: colors.cardSecondary,
+    width: 44,
+    height: 32,
+    borderRadius: 8,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginLeft: 8,
+    borderWidth: 1,
+    borderColor: colors.border,
+  },
+  stepperBtnText: {
+    fontSize: 18,
+    color: colors.text,
+    fontWeight: '600',
+    lineHeight: 20,
+  },
+  stepperBtnWide: {
+    backgroundColor: colors.cardSecondary,
+    paddingHorizontal: 12,
+    height: 32,
+    borderRadius: 8,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginLeft: 8,
+    borderWidth: 1,
+    borderColor: colors.border,
+  },
+  stepperBtnWideText: {
+    fontSize: 12,
+    color: colors.text,
+    fontWeight: '600',
+  },
+  modalActionRow: {
+    paddingVertical: 8,
+    alignItems: 'center',
+  },
+  modalActionText: {
+    fontSize: 15,
+    color: colors.primary,
+    fontWeight: '500',
+  },
+  modalDoneButton: {
+    backgroundColor: colors.primary,
+    paddingVertical: 10,
+    borderRadius: 10,
+    alignItems: 'center',
+    marginTop: 2,
+  },
+  modalDoneButtonText: {
+    color: '#fff',
+    fontSize: 15,
+    fontWeight: '600',
+  },
 });
