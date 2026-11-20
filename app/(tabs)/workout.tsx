@@ -1,16 +1,52 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { Audio } from 'expo-av';
+import { setAudioModeAsync } from 'expo-audio';
 import * as Notifications from 'expo-notifications';
 import { useFocusEffect, useRouter } from 'expo-router';
 import * as Speech from 'expo-speech';
-import React, { useCallback, useContext, useEffect, useMemo, useState } from 'react';
+import { useCallback, useContext, useEffect, useMemo, useState } from 'react';
 import { Alert, AppState, KeyboardAvoidingView, Platform, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 
-import { ThemeContext } from '../ThemeContext';
+import { ThemeContext } from '../../context/ThemeContext';
+import { SyncEvents } from '../../hooks/SyncEvents';
+
+interface BarbellItem {
+  id: string;
+  name: string;
+  weight: string;
+}
+
+interface PlateItem {
+  id: string;
+  weight: string;
+  count: string;
+}
+
+interface SetResult {
+  reps: string;
+  weight: string;
+  isCompleted: boolean;
+}
+
+interface WorkoutResult {
+  name: string;
+  notes: string;
+  targetSets: number;
+  targetReps: string;
+  targetWeight: string | number;
+  sets: SetResult[];
+}
+
+interface WorkoutExercise {
+  name: string;
+  sets: number;
+  reps: string;
+  targetWeight: string | number;
+}
 
 Notifications.setNotificationHandler({
   handleNotification: async () => ({
-    shouldShowAlert: true,
+    shouldShowBanner: true,
+    shouldShowList: true,
     shouldPlaySound: true,
     shouldSetBadge: false,
   }),
@@ -23,15 +59,15 @@ export default function WorkoutScreen() {
   const { colors, isDark } = useContext(ThemeContext);
   const styles = useMemo(() => getStyles(colors, isDark), [colors, isDark]);
   
-  const [barbells, setBarbells] = useState([]);
-  const [plates, setPlates] = useState([]);
-  const [selectedBarbell, setSelectedBarbell] = useState(null);
+  const [barbells, setBarbells] = useState<BarbellItem[]>([]);
+  const [plates, setPlates] = useState<PlateItem[]>([]);
+  const [selectedBarbell, setSelectedBarbell] = useState<BarbellItem | null>(null);
   const [isLoaded, setIsLoaded] = useState(false);
 
   const [restTime, setRestTime] = useState(90);
   const [restExercisesTime, setRestExercisesTime] = useState(120);
   
-  const [workoutPlan, setWorkoutPlan] = useState([]);
+  const [workoutPlan, setWorkoutPlan] = useState<WorkoutExercise[]>([]);
   
   const [activeExerciseIndex, setActiveExerciseIndex] = useState(0);
   const [viewIndex, setViewIndex] = useState(0);
@@ -40,46 +76,44 @@ export default function WorkoutScreen() {
   const [hasActiveWorkout, setHasActiveWorkout] = useState(false);
 
   const [timeLeft, setTimeLeft] = useState(0);
-  const [timerEndTime, setTimerEndTime] = useState(null);
+  const [timerEndTime, setTimerEndTime] = useState<number | null>(null);
   
-  const [activeTimerIndex, setActiveTimerIndex] = useState(null);
-  const [activeTimerExerciseIndex, setActiveTimerExerciseIndex] = useState(null);
+  const [activeTimerIndex, setActiveTimerIndex] = useState<number | null>(null);
+  const [activeTimerExerciseIndex, setActiveTimerExerciseIndex] = useState<number | null>(null);
   const [isExerciseResting, setIsExerciseResting] = useState(false);
 
-  const [pendingSpeech, setPendingSpeech] = useState(false);
 
   const [isWorkoutFinished, setIsWorkoutFinished] = useState(false);
-  const [workoutResults, setWorkoutResults] = useState([]);
+  const [workoutResults, setWorkoutResults] = useState<WorkoutResult[]>([]);
 
   const [altComboIndex, setAltComboIndex] = useState(0);
-  const [ignoredPlates, setIgnoredPlates] = useState([]);
+  const [ignoredPlates, setIgnoredPlates] = useState<string[]>([]);
 
   useEffect(() => {
-    const setupSystem = async () => {
-      try {
-        await Audio.setAudioModeAsync({
-          staysActiveInBackground: true,
-          playsInSilentModeIOS: true,
-          interruptionModeIOS: 1, 
-          shouldDuckAndroid: true,
-          playThroughEarpieceAndroid: false,
-        });
-      } catch (e) {
-        console.log("Błąd audio", e);
-      }
+  const setupSystem = async () => {
+    try {
+      await setAudioModeAsync({
+        playsInSilentMode: true,
+        shouldPlayInBackground: true,
+        interruptionMode: 'mixWithOthers',
+        interruptionModeAndroid: 'duckOthers',
+      });
+    } catch (e) {
+      console.log("Błąd audio", e);
+    }
 
-      if (Platform.OS === 'android') {
-        await Notifications.setNotificationChannelAsync('default', {
-          name: 'default',
-          importance: Notifications.AndroidImportance.MAX,
-          vibrationPattern: [0, 250, 250, 250],
-          lightColor: '#FF231F7C',
-        });
-      }
-      await Notifications.requestPermissionsAsync();
-    };
-    setupSystem();
-  }, []);
+    if (Platform.OS === 'android') {
+      await Notifications.setNotificationChannelAsync('default', {
+        name: 'default',
+        importance: Notifications.AndroidImportance.MAX,
+        vibrationPattern: [0, 250, 250, 250],
+        lightColor: '#FF231F7C',
+      });
+    }
+    await Notifications.requestPermissionsAsync();
+  };
+  setupSystem();
+}, []);
 
   useFocusEffect(
     useCallback(() => {
@@ -116,7 +150,7 @@ export default function WorkoutScreen() {
 
           if (savedPlans && activePlanId) {
             const parsedPlans = JSON.parse(savedPlans);
-            const activePlan = parsedPlans.find(p => p.id === activePlanId);
+            const activePlan = parsedPlans.find((p: any) => p.id === activePlanId);
             
             if (activePlan && activePlan.exercises) {
               setHasActiveWorkout(true);
@@ -137,7 +171,7 @@ export default function WorkoutScreen() {
 
               
               if (!restored) {
-                 const initialResults = activePlan.exercises.map(ex => ({
+                 const initialResults = activePlan.exercises.map((ex: WorkoutExercise) => ({
                     name: ex.name,
                     notes: '',
                     targetSets: ex.sets,
@@ -156,7 +190,6 @@ export default function WorkoutScreen() {
                  setAltComboIndex(0);
                  clearTimerCore();
                  setIsExerciseResting(false);
-                 setPendingSpeech(false);
                  
                  await AsyncStorage.setItem('ongoingWorkoutState', JSON.stringify({
                     planId: activePlanId,
@@ -208,11 +241,22 @@ export default function WorkoutScreen() {
     await Notifications.cancelAllScheduledNotificationsAsync();
   };
 
-  const notifyUser = async () => {
-    try {
-      Speech.speak('Koniec przerwy! Wracaj do ćwiczeń.', { language: 'pl-PL', pitch: 0.1, rate: 1.1 });
-    } catch (e) {}
-  };
+const notifyUser = async () => {
+  try {
+    await setAudioModeAsync({
+      playsInSilentMode: true,
+      shouldPlayInBackground: true,
+      interruptionMode: 'mixWithOthers',
+      interruptionModeAndroid: 'duckOthers',
+    });
+    await Speech.stop();
+    Speech.speak('Koniec przerwy! Wracaj do ćwiczeń.', {
+      language: 'pl-PL',
+      pitch: 1.0,
+      rate: 1.1,
+    });
+  } catch (e) {}
+};
 
   const skipTimer = async () => {
     await clearTimerCore();
@@ -224,10 +268,9 @@ export default function WorkoutScreen() {
     setTimeout(() => { notifyUser(); }, 400);
   };
 
-  const startBackgroundTimer = async (seconds, type, setIndex = null, exerciseIndex = null) => {
+  const startBackgroundTimer = async (seconds: number, type: 'set' | 'exercise', setIndex: number | null = null, exerciseIndex: number | null = null) => {
     setTimerEndTime(Date.now() + seconds * 1000);
-    setTimeLeft(seconds);
-    setPendingSpeech(false); 
+    setTimeLeft(seconds); 
 
     if (type === 'set') {
       setActiveTimerIndex(setIndex);
@@ -254,51 +297,43 @@ export default function WorkoutScreen() {
     });
   };
 
-  useEffect(() => {
-    let interval;
-    if (timerEndTime) {
-      interval = setInterval(() => {
-        const remaining = Math.ceil((timerEndTime - Date.now()) / 1000);
-        if (remaining <= 0) {
-          clearInterval(interval);
-          clearTimerCore();
-          if (isExerciseResting) setIsExerciseResting(false);
-          
-          if (AppState.currentState === 'active') {
-            notifyUser();
-          } else {
-            setPendingSpeech(true);
-          }
-        } else {
-          setTimeLeft(remaining);
-        }
-      }, 500);
-    } else {
-      setTimeLeft(0);
-    }
-    return () => clearInterval(interval);
-  }, [timerEndTime, isExerciseResting]);
+useEffect(() => {
+  let interval: ReturnType<typeof setInterval> | undefined;
+  if (timerEndTime) {
+    interval = setInterval(() => {
+      const remaining = Math.ceil((timerEndTime - Date.now()) / 1000);
+      if (remaining <= 0) {
+        clearInterval(interval);
+        clearTimerCore();
+        if (isExerciseResting) setIsExerciseResting(false);
 
-  useEffect(() => {
-    const subscription = AppState.addEventListener('change', nextAppState => {
-      if (nextAppState === 'active') {
-        if (pendingSpeech) {
-          setPendingSpeech(false);
-          setTimeout(() => { notifyUser(); }, 500);
-        } else if (timerEndTime) {
-          const remaining = Math.ceil((timerEndTime - Date.now()) / 1000);
-          if (remaining <= 0) {
-            clearTimerCore();
-            if (isExerciseResting) setIsExerciseResting(false);
-            setTimeout(() => { notifyUser(); }, 500);
-          } else {
-            setTimeLeft(remaining);
-          }
+        if (AppState.currentState === 'active') {
+          notifyUser();
         }
+      } else {
+        setTimeLeft(remaining);
       }
-    });
-    return () => subscription.remove();
-  }, [timerEndTime, pendingSpeech, isExerciseResting]);
+    }, 500);
+  } else {
+    setTimeLeft(0);
+  }
+  return () => clearInterval(interval);
+}, [timerEndTime, isExerciseResting]);
+
+useEffect(() => {
+  const subscription = AppState.addEventListener('change', nextAppState => {
+    if (nextAppState === 'active' && timerEndTime) {
+      const remaining = Math.ceil((timerEndTime - Date.now()) / 1000);
+      if (remaining <= 0) {
+        clearTimerCore();
+        if (isExerciseResting) setIsExerciseResting(false);
+      } else {
+        setTimeLeft(remaining);
+      }
+    }
+  });
+  return () => subscription.remove();
+}, [timerEndTime, isExerciseResting]);
 
   const currentExercise = workoutPlan[viewIndex];
   const currentResult = workoutResults[viewIndex];
@@ -310,7 +345,7 @@ export default function WorkoutScreen() {
     return currentResult.sets[activeSetIndex]?.weight || currentExercise?.targetWeight || 0;
   };
 
-  const handleFinishSet = (index) => {
+  const handleFinishSet = (index: number) => {
     const updatedResults = [...workoutResults];
     updatedResults[viewIndex].sets[index].isCompleted = true;
     setWorkoutResults(updatedResults);
@@ -336,14 +371,14 @@ export default function WorkoutScreen() {
     }
   };
 
-  const updateSetResult = (exerciseIndex, setIndex, field, value) => {
+  const updateSetResult = (exerciseIndex: number, setIndex: number, field: keyof SetResult, value: string | boolean) => {
     const updated = [...workoutResults];
-    updated[exerciseIndex].sets[setIndex][field] = value;
+    updated[exerciseIndex].sets[setIndex][field] = value as never;
     setWorkoutResults(updated);
     if (field === 'weight') setAltComboIndex(0);
   };
 
-  const updateNote = (exerciseIndex, value) => {
+  const updateNote = (exerciseIndex: number, value: string) => {
     const updated = [...workoutResults];
     updated[exerciseIndex].notes = value;
     setWorkoutResults(updated);
@@ -394,6 +429,7 @@ export default function WorkoutScreen() {
       await AsyncStorage.setItem('workoutHistory', JSON.stringify(historyArray));
       await AsyncStorage.removeItem('activeWorkoutId');
       await AsyncStorage.removeItem('ongoingWorkoutState'); 
+      SyncEvents.emitDataChanged();
       setHasActiveWorkout(false);
       setWorkoutPlan([]); 
       router.push('/history');
@@ -477,8 +513,8 @@ export default function WorkoutScreen() {
       .filter(p => p.count > 0)
       .sort((a, b) => b.weight - a.weight);
 
-    const combinations = [];
-    const findCombinations = (index, currentSum, currentCombo) => {
+    const combinations: { weight: number; count: number }[][] = [];
+    const findCombinations = (index: number, currentSum: number, currentCombo: { weight: number; count: number }[]) => {
       if (combinations.length >= 30) return;
       if (Math.abs(currentSum - weightToFill) < 0.01) {
         combinations.push(currentCombo.filter(c => c.count > 0));
@@ -792,7 +828,7 @@ export default function WorkoutScreen() {
   );
 }
 
-const getStyles = (colors, isDark) => StyleSheet.create({
+const getStyles = (colors: any, isDark: boolean) => StyleSheet.create({
   container: { flex: 1, backgroundColor: colors.background, padding: 15, paddingTop: Platform.OS === 'ios' ? 50 : 20 },
   previewBanner: { backgroundColor: colors.warning, padding: 10, alignItems: 'center', borderRadius: 8, marginBottom: 10 },
   previewBannerText: { color: '#fff', fontWeight: 'bold', fontSize: 13 },
