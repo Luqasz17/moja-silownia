@@ -1,9 +1,10 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useFocusEffect } from 'expo-router';
-import React, { useCallback, useContext, useMemo, useState } from 'react';
+import { useCallback, useContext, useMemo, useState } from 'react';
 import { Alert, KeyboardAvoidingView, Modal, Platform, ScrollView, Share, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 
-import { ThemeContext } from '../ThemeContext';
+import { ThemeContext } from '../../context/ThemeContext';
+import { SyncEvents } from '../../hooks/SyncEvents';
 
 export default function HistoryScreen() {
   const { colors, isDark } = useContext(ThemeContext);
@@ -166,6 +167,7 @@ export default function HistoryScreen() {
     const updatedHistory = history.map(w => w.id === editingWorkoutId ? editableWorkout : w);
     setHistory(updatedHistory);
     await AsyncStorage.setItem('workoutHistory', JSON.stringify(updatedHistory));
+    SyncEvents.emitDataChanged();
     setEditingWorkoutId(null);
     setEditableWorkout(null);
   };
@@ -292,6 +294,7 @@ export default function HistoryScreen() {
     updatedList.sort((a, b) => parseInt(b.id) - parseInt(a.id));
     setMeasurements(updatedList);
     await AsyncStorage.setItem('measurements', JSON.stringify(updatedList));
+    SyncEvents.emitDataChanged();
     setIsCreatingMeasurement(false);
   };
 
