@@ -612,7 +612,15 @@ useEffect(() => {
                   </View>
                 </View>
               ))}
-              <TextInput style={styles.summaryNoteInput} placeholder="Notatka..." placeholderTextColor={colors.textMuted} value={exResult.notes} onChangeText={(val) => updateNote(exIndex, val)} />
+              <TextInput
+                style={styles.summaryNoteInput}
+                placeholder="Notatka..."
+                placeholderTextColor={colors.textMuted}
+                value={exResult.notes}
+                onChangeText={(val) => updateNote(exIndex, val)}
+                multiline={true}
+                scrollEnabled={false}
+              />
             </View>
           ))}
           <TouchableOpacity style={styles.saveHistoryBtn} onPress={saveToHistory}>
@@ -735,7 +743,15 @@ useEffect(() => {
                   </TouchableOpacity>
                 )}
               </View>
-              <TextInput style={styles.activeNoteInput} placeholder="Notatka z tego ćwiczenia..." placeholderTextColor={colors.textMuted} value={currentResult.notes} onChangeText={(val) => updateNote(viewIndex, val)} />
+              <TextInput
+                style={styles.activeNoteInput}
+                placeholder="Notatka z tego ćwiczenia..."
+                placeholderTextColor={colors.textMuted}
+                value={currentResult.notes}
+                onChangeText={(val) => updateNote(viewIndex, val)}
+                multiline={true}
+                scrollEnabled={false}
+              />
             </>
           )}
         </View>
@@ -878,7 +894,7 @@ const getStyles = (colors: any, isDark: boolean) => StyleSheet.create({
   removeSetButton: { flex: 1, backgroundColor: 'rgba(255, 59, 48, 0.1)', paddingVertical: 10, borderRadius: 8, alignItems: 'center', marginTop: 5, borderWidth: 1, borderColor: colors.danger, borderStyle: 'dashed', marginLeft: 5 },
   addSetButtonText: { color: colors.primary, fontWeight: 'bold', fontSize: 13 },
   removeSetButtonText: { color: colors.danger, fontWeight: 'bold', fontSize: 13 },
-  activeNoteInput: { backgroundColor: colors.card, color: colors.text, padding: 12, borderRadius: 8, borderWidth: 1, borderColor: colors.border, fontSize: 14, marginBottom: 10 },
+  activeNoteInput: { backgroundColor: colors.card, color: colors.text, padding: 12, borderRadius: 8, borderWidth: 1, borderColor: colors.border, fontSize: 14, marginBottom: 10, minHeight: 45, textAlignVertical: 'top' },
   bottomNavRow: { flexDirection: 'row', justifyContent: 'space-between', marginTop: 10 },
   navHalfButton: { flex: 1, backgroundColor: colors.cardSecondary, padding: 15, borderRadius: 12, alignItems: 'center', marginHorizontal: 5, borderWidth: 1, borderColor: colors.border },
   navHalfButtonText: { color: colors.text, fontWeight: 'bold', fontSize: 14 },
@@ -903,7 +919,7 @@ const getStyles = (colors: any, isDark: boolean) => StyleSheet.create({
   summarySetNumberBadge: { width: 26, height: 26, borderRadius: 13, backgroundColor: colors.cardSecondary, alignItems: 'center', justifyContent: 'center', marginRight: 10 },
   summarySetNumberText: { color: colors.text, fontWeight: 'bold', fontSize: 12 },
   summaryInput: { backgroundColor: colors.cardSecondary, color: colors.text, paddingVertical: 8, borderRadius: 8, borderWidth: 1, borderColor: colors.border, textAlign: 'center', fontWeight: 'bold', fontSize: 16 },
-  summaryNoteInput: { backgroundColor: colors.cardSecondary, color: colors.text, padding: 10, borderRadius: 8, borderWidth: 1, borderColor: colors.border, fontSize: 14, marginTop: 5 },
+  summaryNoteInput: { backgroundColor: colors.cardSecondary, color: colors.text, padding: 10, borderRadius: 8, borderWidth: 1, borderColor: colors.border, fontSize: 14, marginTop: 5, minHeight: 40, textAlignVertical: 'top' },
   saveHistoryBtn: { backgroundColor: colors.success, padding: 18, borderRadius: 12, alignItems: 'center', marginTop: 10, shadowColor: colors.success, shadowOpacity: 0.3, shadowRadius: 5, elevation: 4 },
   saveHistoryBtnText: { color: '#fff', fontWeight: '900', fontSize: 18 },
   cancelHistoryBtn: { marginTop: 20, alignItems: 'center', padding: 10 },
