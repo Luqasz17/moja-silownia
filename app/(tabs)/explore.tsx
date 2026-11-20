@@ -1,33 +1,48 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useFocusEffect } from 'expo-router';
-import React, { useCallback, useContext, useEffect, useMemo, useState } from 'react';
+import { useCallback, useContext, useEffect, useMemo, useState } from 'react';
 import { Alert, KeyboardAvoidingView, Modal, Platform, ScrollView, Share, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
-
-import { ThemeContext } from '../ThemeContext';
+import { SyncStatusBadge } from '../../components/SyncStatusBadge';
+import { ThemeContext } from '../../context/ThemeContext';
+import { useAutoSync } from '../../hooks/useAutoSync';
+import {
+  getGitHubToken,
+  pullBackupFromGitHub,
+  removeGitHubToken,
+  saveGitHubToken,
+  verifyGitHubToken,
+} from '../../hooks/useGitHubBackup';
 
 export default function SettingsScreen() {
   const { themeMode, updateTheme, colors } = useContext(ThemeContext);
   const styles = useMemo(() => getStyles(colors), [colors]);
 
-  const [barbells, setBarbells] = useState([]);
-  const [plates, setPlates] = useState([]);
+  const [barbells, setBarbells] = useState<{ id: string; name: string; weight: string }[]>([]);
+  const [plates, setPlates] = useState<{ id: string; weight: string; count: string }[]>([]);
   
   const [restSets, setRestSets] = useState('90');
   const [restExercises, setRestExercises] = useState('120');
 
   const [isCreatingBarbell, setIsCreatingBarbell] = useState(false);
-  const [editingBarbellId, setEditingBarbellId] = useState(null);
+  const [editingBarbellId, setEditingBarbellId] = useState<string | null>(null);
   const [barbellName, setBarbellName] = useState('');
   const [barbellWeight, setBarbellWeight] = useState('');
 
   const [isCreatingPlate, setIsCreatingPlate] = useState(false);
-  const [editingPlateId, setEditingPlateId] = useState(null);
+  const [editingPlateId, setEditingPlateId] = useState<string | null>(null);
   const [plateWeight, setPlateWeight] = useState('');
   const [plateCount, setPlateCount] = useState('');
 
   const [reminderNote, setReminderNote] = useState("");
 
+  // --- GitHub Backup ---
+  const { syncStatus, lastSyncAt, triggerSync, restoreMode, toggleRestoreMode } = useAutoSync();
+  const [githubToken, setGithubToken] = useState('');
+  const [savedToken, setSavedToken] = useState<string | null>(null);
+  const [isTokenModalVisible, setIsTokenModalVisible] = useState(false);
+  const [isRestoringFromGitHub, setIsRestoringFromGitHub] = useState(false);
 
+  // --- Stara kopia ręczna ---
   const [isImportModalVisible, setIsImportModalVisible] = useState(false);
   const [importText, setImportText] = useState('');
 
@@ -54,6 +69,8 @@ export default function SettingsScreen() {
 
   useEffect(() => {
     loadSettings();
+    // Załaduj aktualny token (do wyświetlenia czy jest ustawiony)
+    getGitHubToken().then(t => setSavedToken(t));
   }, []);
 
   const loadSettings = async () => {
@@ -72,7 +89,7 @@ export default function SettingsScreen() {
     }
   };
 
-  const saveSettings = async (key, value) => {
+  const saveSettings = async (key: string, value: unknown) => {
     try {
       await AsyncStorage.setItem(key, typeof value === 'string' ? value : JSON.stringify(value));
     } catch (error) {
@@ -110,14 +127,14 @@ export default function SettingsScreen() {
     cancelBarbellForm();
   };
 
-  const editBarbell = (b) => {
+  const editBarbell = (b: { id: string; name: string; weight: string }) => {
     setEditingBarbellId(b.id);
     setBarbellName(b.name);
     setBarbellWeight(b.weight.toString());
     setIsCreatingBarbell(true);
   };
 
-  const deleteBarbell = (id) => {
+  const deleteBarbell = (id: string) => {
     Alert.alert("Usuń", "Na pewno chcesz usunąć tę sztangę?", [
       { text: "Anuluj", style: "cancel" },
       { text: "Usuń", style: "destructive", onPress: () => {
@@ -160,14 +177,14 @@ export default function SettingsScreen() {
     cancelPlateForm();
   };
 
-  const editPlate = (p) => {
+  const editPlate = (p: { id: string; weight: string; count: string }) => {
     setEditingPlateId(p.id);
     setPlateWeight(p.weight.toString());
     setPlateCount(p.count.toString());
     setIsCreatingPlate(true);
   };
 
-  const deletePlate = (id) => {
+  const deletePlate = (id: string) => {
     Alert.alert("Usuń", "Na pewno chcesz usunąć te talerze?", [
       { text: "Anuluj", style: "cancel" },
       { text: "Usuń", style: "destructive", onPress: () => {
@@ -186,16 +203,83 @@ export default function SettingsScreen() {
   };
 
   
+  // --- GitHub Backup: zapis tokenu ---
+  const handleSaveToken = async () => {
+    if (!githubToken.trim()) {
+      Alert.alert('Błąd', 'Wklej token GitHub!');
+      return;
+    }
+    Alert.alert('Weryfikacja...', 'Sprawdzam token z GitHubem...');
+    const valid = await verifyGitHubToken(githubToken.trim());
+    if (!valid) {
+      Alert.alert('Błąd', 'Token jest nieprawidłowy lub nie ma dostępu do repozytorium. Sprawdź czy skopiowałeś go poprawnie.');
+      return;
+    }
+    await saveGitHubToken(githubToken.trim());
+    setSavedToken(githubToken.trim());
+    setGithubToken('');
+    setIsTokenModalVisible(false);
+    Alert.alert('Sukces 🎉', 'Token zapisany! Automatyczny backup jest aktywny.');
+    triggerSync(true);
+  };
+
+  // --- GitHub Backup: usunięcie tokenu ---
+  const handleRemoveToken = () => {
+    Alert.alert(
+      'Usuń token',
+      'Czy na pewno chcesz wyłączyć synchronizację z GitHub?',
+      [
+        { text: 'Anuluj', style: 'cancel' },
+        {
+          text: 'Wyłącz sync', style: 'destructive', onPress: async () => {
+            await removeGitHubToken();
+            setSavedToken(null);
+          }
+        }
+      ]
+    );
+  };
+
+  // --- GitHub Backup: przywróć z GitHub ---
+  const handleRestoreFromGitHub = () => {
+    Alert.alert(
+      'Przywróć z GitHub',
+      'Obecne dane aplikacji zostaną ZASTĄPIONE danymi z ostatniego backupu na GitHubie. Czy na pewno?',
+      [
+        { text: 'Anuluj', style: 'cancel' },
+        {
+          text: 'Przywróć', style: 'destructive', onPress: async () => {
+            setIsRestoringFromGitHub(true);
+            try {
+              const exportedAt = await pullBackupFromGitHub();
+              Alert.alert('Sukces 🎉', `Dane przywrócone z backupu z: ${exportedAt}\n\nPrzeładuj aplikację, aby zobaczyć zmiany.`);
+              loadSettings();
+            } catch (err: any) {
+              if (err.message === 'BACKUP_NOT_FOUND') {
+                Alert.alert('Brak backupu', 'Nie znaleziono pliku backup.json w repozytorium. Najpierw wykonaj synchronizację.');
+              } else if (err.message === 'NO_TOKEN') {
+                Alert.alert('Brak tokenu', 'Skonfiguruj najpierw token GitHub.');
+              } else {
+                Alert.alert('Błąd', `Nie udało się przywrócić: ${err.message}`);
+              }
+            } finally {
+              setIsRestoringFromGitHub(false);
+            }
+          }
+        }
+      ]
+    );
+  };
+
   const handleExportBackup = async () => {
     try {
       
       const keys = ['workoutPlans', 'barbells', 'plates', 'restSets', 'restExercises', 'reminderNote', 'workoutHistory', 'measurements'];
       const stores = await AsyncStorage.multiGet(keys);
       
-      const backupData = {};
-      stores.forEach(([key, value]) => {
+      const backupData: Record<string, unknown> = {};
+      stores.forEach(([key, value]: [string, string | null]) => {
         if (value) {
-      
           try {
             backupData[key] = JSON.parse(value);
           } catch (e) {
@@ -222,26 +306,39 @@ export default function SettingsScreen() {
     }
 
     try {
-      const parsedData = JSON.parse(importText);
-      const keysToSet = [];
+      const parsed = JSON.parse(importText);
 
-      for (const key in parsedData) {
-        const value = parsedData[key];
-        
-        keysToSet.push([key, typeof value === 'string' ? value : JSON.stringify(value)]);
+      // Obsługa obu formatów:
+      // - Nowy (GitHub, version 2): { version: 2, data: { workoutPlans, ... } }
+      // - Stary (ręczny eksport):   { workoutPlans, workoutHistory, ... }
+      const sourceData: Record<string, unknown> =
+        parsed.version === 2 && parsed.data ? parsed.data : parsed;
+
+      // Tylko znane klucze aplikacji — ignorujemy metadane (version, exportedAt itp.)
+      const KNOWN_KEYS = ['workoutPlans', 'workoutHistory', 'measurements', 'barbells', 'plates', 'reminderNote', 'restSets', 'restExercises'];
+      const keysToSet: [string, string][] = [];
+
+      for (const key of KNOWN_KEYS) {
+        const value = sourceData[key];
+        if (value !== undefined) {
+          keysToSet.push([key, typeof value === 'string' ? value : JSON.stringify(value)]);
+        }
       }
 
-      await AsyncStorage.multiSet(keysToSet);
-      
-      Alert.alert("Sukces! 🎉", "Pomyślnie wczytano kopię zapasową. Uruchom aplikację ponownie, aby odświeżyć wszystkie dane.");
+      if (keysToSet.length === 0) {
+        Alert.alert("Błąd", "Nie znaleziono żadnych danych aplikacji w tym pliku.");
+        return;
+      }
+
+      await AsyncStorage.multiSet(keysToSet as readonly [string, string][]);
+
+      Alert.alert("Sukces! 🎉", `Przywrócono ${keysToSet.length} kategorii danych. Przeładuj aplikację, aby zobaczyć zmiany.`);
       setIsImportModalVisible(false);
       setImportText('');
-      
-      
       loadSettings();
-      
+
     } catch (error) {
-      Alert.alert("Błąd", "Nieprawidłowy format kodu kopii zapasowej. Upewnij się, że skopiowałeś cały tekst.");
+      Alert.alert("Błąd", "Nieprawidłowy format kopii zapasowej. Upewnij się, że skopiowałeś cały plik JSON.");
     }
   };
 
@@ -386,10 +483,83 @@ export default function SettingsScreen() {
 
         <View style={styles.divider} />
 
-        {/* --- NOWA SEKCJA: KOPIA ZAPASOWA --- */}
+        {/* --- SEKCJA: GITHUB AUTO-SYNC --- */}
         <View style={{ marginBottom: 30 }}>
-          <Text style={styles.sectionTitle}> Pełna kopia zapasowa</Text>
-          <Text style={styles.helperText}>Zabezpiecz swoje plany, ustawienia, pomiary i historię na wypadek reinstalacji aplikacji.</Text>
+          <Text style={styles.sectionTitle}>☁️ Automatyczny backup (GitHub)</Text>
+          <Text style={styles.helperText}>
+            Dane synchronizują się automatycznie po każdym treningu, pomiarze i zmianie planu.
+          </Text>
+
+          {/* Wskaźnik statusu */}
+          <SyncStatusBadge
+            status={syncStatus}
+            lastSyncAt={lastSyncAt}
+          />
+
+          {savedToken ? (
+            <View>
+              {/* Tryb przywracania — blokuje auto-push żeby można było edytować GitHub */}
+              <TouchableOpacity
+                style={[
+                  styles.saveBtn,
+                  {
+                    marginBottom: 10,
+                    backgroundColor: restoreMode ? colors.warning : colors.cardSecondary,
+                    borderWidth: 1,
+                    borderColor: restoreMode ? colors.warning : colors.border,
+                  }
+                ]}
+                onPress={toggleRestoreMode}
+              >
+                <Text style={[styles.saveBtnText, { color: restoreMode ? '#fff' : colors.text }]}>
+                  {restoreMode ? '🔒 Tryb przywracania WŁĄCZONY — kliknij aby wyłączyć' : '🔓 Włącz tryb przywracania (zablokuj auto-push)'}
+                </Text>
+              </TouchableOpacity>
+
+              {restoreMode && (
+                <Text style={[styles.helperText, { color: colors.warning, marginBottom: 10 }]}>
+                  ⚠️ Auto-push wyłączony. Możesz teraz edytować plik na GitHubie bez obawy o nadpisanie. Kliknij "↓ Przywróć z GitHub" gdy skończysz.
+                </Text>
+              )}
+
+              <View style={styles.row}>
+                <TouchableOpacity
+                  style={[styles.saveBtn, { flex: 1, marginRight: 5, backgroundColor: restoreMode ? colors.textMuted : colors.primary }]}
+                  onPress={() => triggerSync(true)}
+                  disabled={syncStatus === 'syncing' || restoreMode}
+                >
+                  <Text style={styles.saveBtnText}>↑ Wymuś sync</Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  style={[styles.saveBtn, { flex: 1, marginLeft: 5, backgroundColor: isRestoringFromGitHub ? colors.textMuted : colors.cardSecondary, borderWidth: 1, borderColor: colors.border }]}
+                  onPress={handleRestoreFromGitHub}
+                  disabled={isRestoringFromGitHub}
+                >
+                  <Text style={[styles.saveBtnText, { color: colors.text }]}>
+                    {isRestoringFromGitHub ? '⏳ Przywracam...' : '↓ Przywróć z GitHub'}
+                  </Text>
+                </TouchableOpacity>
+              </View>
+              <TouchableOpacity onPress={handleRemoveToken} style={{ marginTop: 10, alignItems: 'center' }}>
+                <Text style={{ color: colors.danger, fontSize: 13, fontWeight: 'bold' }}>Wyłącz synchronizację (usuń token)</Text>
+              </TouchableOpacity>
+            </View>
+          ) : (
+            <TouchableOpacity
+              style={[styles.saveBtn, { backgroundColor: '#24292e' }]}
+              onPress={() => setIsTokenModalVisible(true)}
+            >
+              <Text style={styles.saveBtnText}>🔑 Skonfiguruj token GitHub</Text>
+            </TouchableOpacity>
+          )}
+        </View>
+
+        <View style={styles.divider} />
+
+        {/* --- STARA KOPIA ZAPASOWA (fallback / eksport ręczny) --- */}
+        <View style={{ marginBottom: 30 }}>
+          <Text style={styles.sectionTitle}>📋 Ręczna kopia (JSON)</Text>
+          <Text style={styles.helperText}>Zapasowy eksport danych jako tekst — użyj jeśli nie masz GitHub.</Text>
           
           <View style={styles.row}>
              <TouchableOpacity style={[styles.saveBtn, { flex: 1, marginRight: 5, backgroundColor: colors.primary }]} onPress={handleExportBackup}>
@@ -405,7 +575,51 @@ export default function SettingsScreen() {
         <View style={{height: 100}} />
       </ScrollView>
 
-      {/* --- MODAL IMPORTU --- */}
+      {/* --- MODAL: TOKEN GITHUB --- */}
+      <Modal visible={isTokenModalVisible} transparent={true} animationType="slide">
+        <View style={styles.modalOverlay}>
+          <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'} style={styles.modalContent}>
+            <View style={styles.modalHeader}>
+              <Text style={styles.modalTitle}>🔑 Token GitHub</Text>
+            </View>
+
+            <Text style={styles.helperText}>
+              Token pozwala aplikacji automatycznie zapisywać dane do Twojego repozytorium GitHub.
+            </Text>
+            <Text style={[styles.helperText, { marginBottom: 4, color: colors.text, fontStyle: 'normal', fontWeight: 'bold' }]}>
+              Jak wygenerować token:
+            </Text>
+            <Text style={styles.helperText}>
+              1. Wejdź na github.com → Settings → Developer settings{'\n'}
+              2. Personal access tokens → Tokens (classic) → Generate new token{'\n'}
+              3. Zaznacz uprawnienie: {"\"repo\""}{'\n'}
+              4. Kliknij "Generate token" i skopiuj go poniżej
+            </Text>
+
+            <TextInput
+              style={[styles.inputFull, { fontFamily: Platform.OS === 'ios' ? 'Courier' : 'monospace', fontSize: 12 }]}
+              placeholder="ghp_xxxxxxxxxxxxxxxxxxxx"
+              placeholderTextColor={colors.textMuted}
+              value={githubToken}
+              onChangeText={setGithubToken}
+              autoCapitalize="none"
+              autoCorrect={false}
+              secureTextEntry={false}
+            />
+
+            <View style={styles.formActions}>
+              <TouchableOpacity style={styles.cancelFormBtn} onPress={() => { setIsTokenModalVisible(false); setGithubToken(''); }}>
+                <Text style={styles.cancelFormBtnText}>Anuluj</Text>
+              </TouchableOpacity>
+              <TouchableOpacity style={styles.saveFormBtn} onPress={handleSaveToken}>
+                <Text style={styles.saveFormBtnText}>Zapisz i aktywuj</Text>
+              </TouchableOpacity>
+            </View>
+          </KeyboardAvoidingView>
+        </View>
+      </Modal>
+
+      {/* --- MODAL IMPORTU JSON --- */}
       <Modal visible={isImportModalVisible} transparent={true} animationType="slide">
         <View style={styles.modalOverlay}>
           <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'} style={styles.modalContent}>
@@ -440,7 +654,7 @@ export default function SettingsScreen() {
   );
 }
 
-const getStyles = (colors) => StyleSheet.create({
+const getStyles = (colors: any) => StyleSheet.create({
   container: { flex: 1, padding: 15, paddingTop: 60, backgroundColor: colors.background },
   headerTitle: { fontSize: 26, fontWeight: 'bold', marginBottom: 15, color: colors.text },
   sectionTitle: { fontSize: 18, fontWeight: 'bold', color: colors.text, marginBottom: 10 },
