@@ -13,8 +13,9 @@ const API_BASE = 'https://api.github.com';
 const ROOT = path.join(__dirname, '..');
 
 const token = process.argv[2];
+const customMessage = process.argv[3];
 if (!token) {
-  console.error('Użycie: node scripts/commit-all.js <GITHUB_TOKEN>');
+  console.error('Użycie: node scripts/commit-all.js <GITHUB_TOKEN> [COMMIT_MESSAGE]');
   process.exit(1);
 }
 
@@ -37,7 +38,7 @@ function encodeBase64(content) {
   return Buffer.from(content, 'utf8').toString('base64');
 }
 
-async function getFileSha(repoPath) {
+async function getFileInfo(repoPath) {
   const url = `${API_BASE}/repos/${OWNER}/${REPO}/contents/${repoPath}`;
   const res = await fetch(url, {
     headers: {
@@ -51,13 +52,17 @@ async function getFileSha(repoPath) {
     throw new Error(`GET ${repoPath} -> ${res.status}: ${err.message}`);
   }
   const json = await res.json();
-  return json.sha;
+  return { sha: json.sha, content: json.content ? json.content.replace(/\s/g, '') : null };
 }
 
 async function pushFile(repoPath, content, sha) {
   const url = `${API_BASE}/repos/${OWNER}/${REPO}/contents/${repoPath}`;
+  const message = customMessage
+    ? `${customMessage} (${repoPath})`
+    : `🔄 Update ${repoPath} [${new Date().toLocaleString('pl-PL')}]`;
+
   const body = {
-    message: `🔄 Update ${repoPath} [${new Date().toLocaleString('pl-PL')}]`,
+    message,
     content: encodeBase64(content),
   };
   if (sha) body.sha = sha;
@@ -81,7 +86,7 @@ async function pushFile(repoPath, content, sha) {
 
 (async () => {
   console.log(`\n📡 Łączę z GitHub (${OWNER}/${REPO})...\n`);
-  let ok = 0, fail = 0;
+  let ok = 0, skipped = 0, fail = 0;
 
   for (const relPath of FILES) {
     const localPath = path.join(ROOT, relPath.replace(/\//g, path.sep));
@@ -92,13 +97,20 @@ async function pushFile(repoPath, content, sha) {
     }
 
     const content = fs.readFileSync(localPath, 'utf8');
+    const localBase64 = encodeBase64(content);
 
     try {
       process.stdout.write(`  → ${relPath} ... `);
-      const sha = await getFileSha(relPath);
-      const result = await pushFile(relPath, content, sha);
-      console.log(`✅  commit ${result.commit.sha.slice(0, 8)}`);
-      ok++;
+      const remote = await getFileInfo(relPath);
+
+      if (remote && remote.content === localBase64) {
+        console.log(`⏸️  bez zmian`);
+        skipped++;
+      } else {
+        const result = await pushFile(relPath, content, remote ? remote.sha : null);
+        console.log(`✅  commit ${result.commit.sha.slice(0, 8)}`);
+        ok++;
+      }
     } catch (err) {
       console.log(`❌  ${err.message}`);
       fail++;
@@ -110,6 +122,7 @@ async function pushFile(repoPath, content, sha) {
 
   console.log(`\n${'─'.repeat(50)}`);
   console.log(`✅ Zaktualizowano: ${ok} plików`);
+  console.log(`⏸️  Bez zmian:     ${skipped} plików`);
   if (fail > 0) console.log(`❌ Błędy:        ${fail} plików`);
   console.log('');
 })();
