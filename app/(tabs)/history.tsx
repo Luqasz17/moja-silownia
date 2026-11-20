@@ -474,7 +474,15 @@ export default function HistoryScreen() {
                                    </View>
                                  </View>
                                ))}
-                               <TextInput style={styles.summaryNoteInput} placeholder="Notatka..." placeholderTextColor={colors.textMuted} value={exResult.notes} onChangeText={(val) => updateEditedNote(exIndex, val)} />
+                               <TextInput
+                                 style={styles.summaryNoteInput}
+                                 placeholder="Notatka..."
+                                 placeholderTextColor={colors.textMuted}
+                                 value={exResult.notes}
+                                 onChangeText={(val) => updateEditedNote(exIndex, val)}
+                                 multiline={true}
+                                 scrollEnabled={false}
+                               />
                              </View>
                            ))}
                            <View style={styles.formActions}>
@@ -667,5 +675,5 @@ const getStyles = (colors, isDark) => StyleSheet.create({
   summarySetNumberBadge: { width: 26, height: 26, borderRadius: 13, backgroundColor: colors.cardSecondary, alignItems: 'center', justifyContent: 'center', marginRight: 10 },
   summarySetNumberText: { color: colors.text, fontWeight: 'bold', fontSize: 12 },
   summaryInput: { backgroundColor: colors.cardSecondary, color: colors.text, paddingVertical: 8, borderRadius: 8, borderWidth: 1, borderColor: colors.border, textAlign: 'center', fontWeight: 'bold', fontSize: 16 },
-  summaryNoteInput: { backgroundColor: colors.cardSecondary, color: colors.text, padding: 10, borderRadius: 8, borderWidth: 1, borderColor: colors.border, fontSize: 14, marginTop: 5 }
+  summaryNoteInput: { backgroundColor: colors.cardSecondary, color: colors.text, padding: 10, borderRadius: 8, borderWidth: 1, borderColor: colors.border, fontSize: 14, marginTop: 5, minHeight: 40, textAlignVertical: 'top' }
 });
